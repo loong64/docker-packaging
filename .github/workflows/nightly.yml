@@ -24,7 +24,7 @@ jobs:
         id: matrix
         uses: actions/github-script@v7
         env:
-          DISABLED_PACKAGES: scan,sbom
+          DISABLED_PACKAGES: credential-helpers,model,scan,sbom
         with:
           script: |
             const fs = require('fs');
@@ -44,7 +44,6 @@ jobs:
         pkg: ${{ fromJson(needs.prepare.outputs.pkgs) }}
     with:
       name: ${{ matrix.pkg }}
-      push: true
       envs: |
         NIGHTLY_BUILD=1
     secrets: inherit
