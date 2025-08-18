@@ -38,17 +38,17 @@ ARG ZIG_VERSION="0.15.2"
 FROM scratch AS scripts
 
 # cross compilation helper
-FROM --platform=$BUILDPLATFORM tonistiigi/xx:${XX_VERSION} AS xx
+FROM --platform=$BUILDPLATFORM ghcr.io/loong64/tonistiigi/xx:${XX_VERSION} AS xx
 
 # osxcross contains the MacOSX cross toolchain for xx
 FROM crazymax/osxcross:15.5-debian AS osxcross
 
 # go base image to retrieve /usr/local/go
-FROM ${GO_IMAGE}:${GO_VERSION}-${GO_IMAGE_VARIANT} AS go
-FROM --platform=$BUILDPLATFORM ${GO_IMAGE}:${GO_VERSION}-${GO_IMAGE_VARIANT} AS gocross
+FROM ghcr.io/loong64/${GO_IMAGE}:${GO_VERSION}-${GO_IMAGE_VARIANT} AS go
+FROM --platform=$BUILDPLATFORM ghcr.io/loong64/${GO_IMAGE}:${GO_VERSION}-${GO_IMAGE_VARIANT} AS gocross
 
 # src
-FROM --platform=$BUILDPLATFORM alpine AS src-base
+FROM --platform=$BUILDPLATFORM ghcr.io/loong64/alpine AS src-base
 RUN apk add --no-cache bash curl file git zip tar
 
 FROM src-base AS src
@@ -98,7 +98,7 @@ ARG DISTRO_NAME
 RUN apt-get update && apt-get install -y --no-install-recommends apt-utils bash ca-certificates curl devscripts equivs git
 COPY deb /root/package/debian
 ARG TARGETPLATFORM
-RUN mk-build-deps -t "xx-apt-get -o Debug::pkgProblemResolver=yes --no-install-recommends -y" -i /root/package/debian/control
+RUN mk-build-deps -t "apt-get -o Debug::pkgProblemResolver=yes --no-install-recommends -y" -i /root/package/debian/control
 WORKDIR /root/package
 ARG NIGHTLY_BUILD
 ARG DISTRO_RELEASE

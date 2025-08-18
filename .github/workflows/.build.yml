@@ -18,8 +18,8 @@ on:
         type: string
 
 env:
-  REPO_SLUG: dockereng/packaging
-  BUILD_CACHE_REGISTRY_SLUG: dockereng/packaging-cache
+  REPO_SLUG: ghcr.io/loong64/dockereng/packaging
+  BUILD_CACHE_REGISTRY_SLUG: ghcr.io/loong64/dockereng/packaging-cache
   DOCKER_BUILD_SUMMARY: false
 
 jobs:
@@ -106,7 +106,7 @@ jobs:
 
   build:
     runs-on: ${{ matrix.runner }}
-    timeout-minutes: 60
+    # timeout-minutes: 60
     needs:
       - prepare
     strategy:
@@ -237,12 +237,13 @@ jobs:
             com.github.docker.packaging.run_number=${{ github.run_number }}
           bake-target: meta-helper
       -
-        name: Login to Docker Hub
+        name: Login to GitHub Container Registry
         uses: docker/login-action@v3
         if: ${{ inputs.release || github.event_name == 'schedule' }}
         with:
-          username: ${{ secrets.DOCKERPUBLICBOT_USERNAME }}
-          password: ${{ secrets.DOCKERPUBLICBOT_WRITE_PAT }}
+          registry: ghcr.io
+          username: ${{ github.repository_owner }}
+          password: ${{ secrets.GH_TOKEN }}
       -
         name: Build release
         id: build
@@ -337,7 +338,7 @@ jobs:
             ./bin/pkg/${{ inputs.name }}/metadata.env
             /tmp/release-metadata.json
           body: |
-            Image available at [https://hub.docker.com/r/${{ env.REPO_SLUG }}](https://hub.docker.com/r/${{ env.REPO_SLUG }}).
+            Image available at [https://${{ env.REPO_SLUG }}](https://${{ env.REPO_SLUG }}).
 
             ## Tags
             ${{ steps.release-metadata.outputs.tags }}

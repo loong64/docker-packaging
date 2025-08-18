@@ -20,7 +20,7 @@ ARG DISTRO_TYPE="deb"
 ARG DISTRO_IMAGE="debian:bookworm"
 
 # cross compilation helper
-FROM --platform=$BUILDPLATFORM tonistiigi/xx:${XX_VERSION} AS xx
+FROM --platform=$BUILDPLATFORM ghcr.io/loong64/tonistiigi/xx:${XX_VERSION} AS xx
 
 FROM scratch AS bin
 FROM scratch AS scripts
