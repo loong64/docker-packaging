@@ -39,14 +39,14 @@ ARG GO_IMAGE_VARIANT="bookworm"
 FROM scratch AS scripts
 
 # cross compilation helper
-FROM --platform=$BUILDPLATFORM tonistiigi/xx:${XX_VERSION} AS xx
+FROM --platform=$BUILDPLATFORM ghcr.io/loong64/tonistiigi/xx:${XX_VERSION} AS xx
 
 # go base image to retrieve /usr/local/go
-FROM ${GO_IMAGE}:${GO_VERSION}-${GO_IMAGE_VARIANT} AS go
-FROM --platform=$BUILDPLATFORM ${GO_IMAGE}:${GO_VERSION}-${GO_IMAGE_VARIANT} AS gocross
+FROM ghcr.io/loong64/${GO_IMAGE}:${GO_VERSION}-${GO_IMAGE_VARIANT} AS go
+FROM --platform=$BUILDPLATFORM ghcr.io/loong64/${GO_IMAGE}:${GO_VERSION}-${GO_IMAGE_VARIANT} AS gocross
 
 # src
-FROM --platform=$BUILDPLATFORM alpine AS src-base
+FROM --platform=$BUILDPLATFORM ghcr.io/loong64/alpine AS src-base
 RUN apk add --no-cache bash curl file git zip tar
 
 FROM src-base AS src
@@ -107,7 +107,7 @@ RUN <<EOT
 EOT
 COPY deb /root/package/debian
 ARG TARGETPLATFORM
-RUN mk-build-deps -t "xx-apt-get -o Debug::pkgProblemResolver=yes --no-install-recommends -y" -i /root/package/debian/control
+RUN mk-build-deps -t "apt-get -o Debug::pkgProblemResolver=yes --no-install-recommends -y" -i /root/package/debian/control
 WORKDIR /root/package
 ARG NIGHTLY_BUILD
 ARG DISTRO_RELEASE
@@ -120,6 +120,7 @@ ARG PKG_DEB_BUILDFLAGS
 ARG PKG_DEB_REVISION
 ARG PKG_DEB_EPOCH
 ARG SOURCE_DATE_EPOCH
+ENV CMAKE_POLICY_VERSION_MINIMUM=3.5
 RUN --mount=type=bind,source=scripts/pkg-deb-build.sh,target=/usr/local/bin/pkg-deb-build \
     --mount=type=bind,source=scripts/check-gomod.sh,target=/usr/local/bin/check-gomod \
     --mount=type=bind,from=scripts,source=gen-ver.sh,target=/usr/local/bin/gen-ver \
@@ -197,7 +198,7 @@ ARG PKG_REF
 ARG NIGHTLY_BUILD
 WORKDIR /build
 ARG TARGETPLATFORM
-RUN xx-apt-get install -y gcc libc6-dev libapparmor-dev libnftables-dev libsecret-1-dev libsystemd-dev libudev-dev pkg-config
+RUN apt-get install -y gcc libc6-dev libapparmor-dev libnftables-dev libsecret-1-dev libsystemd-dev libudev-dev pkg-config
 RUN --mount=type=bind,source=scripts/pkg-static-build.sh,target=/usr/local/bin/pkg-static-build \
     --mount=type=bind,source=scripts/check-gomod.sh,target=/usr/local/bin/check-gomod \
     --mount=type=bind,from=scripts,source=gen-ver.sh,target=/usr/local/bin/gen-ver \

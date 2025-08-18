@@ -19,7 +19,7 @@ ARG XX_VERSION="1.9.0"
 # https://github.com/containerd/containerd/blob/main/.github/workflows/ci.yml#L111
 ARG MD2MAN_VERSION="v2.0.2"
 
-ARG RUNC_REPO="https://github.com/opencontainers/runc.git"
+ARG RUNC_REPO="https://github.com/loong64/runc.git"
 ARG RUNHCS_REPO="https://github.com/Microsoft/hcsshim.git"
 
 ARG DISTRO_NAME="debian12"
@@ -42,11 +42,11 @@ ARG GO_IMAGE_VARIANT="bookworm"
 FROM scratch AS scripts
 
 # cross compilation helper
-FROM --platform=$BUILDPLATFORM tonistiigi/xx:${XX_VERSION} AS xx
+FROM --platform=$BUILDPLATFORM ghcr.io/loong64/tonistiigi/xx:${XX_VERSION} AS xx
 
 # go base image to retrieve /usr/local/go
-FROM ${GO_IMAGE}:${GO_VERSION}-${GO_IMAGE_VARIANT} AS go
-FROM --platform=$BUILDPLATFORM ${GO_IMAGE}:${GO_VERSION}-${GO_IMAGE_VARIANT} AS gocross
+FROM ghcr.io/loong64/${GO_IMAGE}:${GO_VERSION}-${GO_IMAGE_VARIANT} AS go
+FROM --platform=$BUILDPLATFORM ghcr.io/loong64/${GO_IMAGE}:${GO_VERSION}-${GO_IMAGE_VARIANT} AS gocross
 
 # md2man
 FROM go AS go-md2man
@@ -57,8 +57,8 @@ ARG MD2MAN_VERSION
 RUN go install github.com/cpuguy83/go-md2man/v2@${MD2MAN_VERSION}
 
 # src
-FROM --platform=$BUILDPLATFORM alpine AS src-base
-RUN apk add --no-cache bash curl file git zip tar
+FROM --platform=$BUILDPLATFORM ghcr.io/loong64/alpine AS src-base
+RUN apk add --no-cache bash curl file git zip tar patch
 
 FROM src-base AS src
 WORKDIR /src
@@ -109,7 +109,8 @@ FROM src-base AS libseccomp-src
 WORKDIR /src
 RUN --mount=from=runc-src,source=/src,target=/runc <<EOT
   set -e
-  LIBSECCOMP_VERSION=$(grep '^ARG LIBSECCOMP_VERSION=' /runc/Dockerfile | cut -d'=' -f2)
+  # LIBSECCOMP_VERSION=$(grep '^ARG LIBSECCOMP_VERSION=' /runc/Dockerfile | cut -d'=' -f2)
+  LIBSECCOMP_VERSION=2.6.0
   set -x
   curl -sSL "https://github.com/seccomp/libseccomp/releases/download/v${LIBSECCOMP_VERSION}/libseccomp-${LIBSECCOMP_VERSION}.tar.gz" | tar -xz --strip-components=1
 EOT
@@ -176,7 +177,7 @@ ARG DISTRO_NAME
 RUN apt-get update && apt-get install -y --no-install-recommends apt-utils bash ca-certificates curl devscripts equivs git lsb-release
 COPY deb /root/package/debian
 ARG TARGETPLATFORM
-RUN mk-build-deps -t "xx-apt-get -o Debug::pkgProblemResolver=yes --no-install-recommends -y" -i /root/package/debian/control
+RUN mk-build-deps -t "apt-get -o Debug::pkgProblemResolver=yes --no-install-recommends -y" -i /root/package/debian/control
 WORKDIR /root/package
 ARG NIGHTLY_BUILD
 ARG DISTRO_RELEASE
@@ -256,7 +257,7 @@ ARG NIGHTLY_BUILD
 ARG RUNC_REF
 WORKDIR /build
 ARG TARGETPLATFORM
-RUN xx-apt-get install -y gcc
+RUN apt-get update && apt-get install -y gcc
 RUN --mount=type=bind,source=scripts/pkg-static-build.sh,target=/usr/local/bin/pkg-static-build \
     --mount=type=bind,from=scripts,source=gen-ver.sh,target=/usr/local/bin/gen-ver \
     --mount=type=bind,from=scripts,source=fix-cc.sh,target=/usr/local/bin/fix-cc \

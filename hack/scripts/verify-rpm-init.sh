@@ -34,10 +34,25 @@ if [[ "$pkgrelease" = rockylinux* ]]; then
 fi
 
 case "$pkgrelease" in
+  anolis23)
+    dnf install -y findutils dnf-plugins-core
+    ;;
   centos9)
     rpm --import /etc/pki/rpm-gpg/RPM-GPG-KEY-centosofficial
     dnf install -y findutils dnf-plugins-core epel-release epel-next-release
     dnf config-manager --set-enabled crb
+    ;;
+  kylin11)
+    dnf install -y findutils dnf-plugins-core
+    ;;
+  loongnix23)
+    dnf install -y findutils dnf-plugins-core
+    ;;
+  openeuler24)
+    dnf install -y findutils dnf-plugins-core
+    ;;
+  opencloudos*)
+    dnf install -y findutils dnf-plugins-core
     ;;
   oraclelinux8)
     dnf install -y findutils dnf-plugins-core oraclelinux-release-el8 oracle-epel-release-el8
