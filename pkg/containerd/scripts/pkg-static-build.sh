@@ -61,6 +61,22 @@ if [[ "$(xx-info os)" = "windows" ]] && [ "$(xx-info arch)" != "amd64" ]; then
   export CGO_ENABLED=0
 fi
 
+if [ "$(xx-info arch)" = "loong64" ]; then
+  apt-get update && apt-get install -y gcc-loongarch64-linux-gnu
+fi
+
+if [ "$(xx-info arch)" = "ppc64le" ]; then
+  apt-get update && apt-get install -y gcc-powerpc64le-linux-gnu
+fi
+
+if [ "$(xx-info arch)" = "s390x" ]; then
+  apt-get update && apt-get install -y gcc-s390x-linux-gnu
+fi
+
+if [ "$(xx-info arch)" = "riscv64" ]; then
+  apt-get update && apt-get install -y gcc-riscv64-linux-gnu
+fi
+
 (
   set -x
   pushd ${SRCDIR}
