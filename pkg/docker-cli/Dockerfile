@@ -40,17 +40,17 @@ ARG GO_IMAGE_VARIANT="bookworm"
 FROM scratch AS scripts
 
 # cross compilation helper
-FROM --platform=$BUILDPLATFORM tonistiigi/xx:${XX_VERSION} AS xx
+FROM --platform=$BUILDPLATFORM ghcr.io/loong64/tonistiigi/xx:${XX_VERSION} AS xx
 
 # osxcross contains the MacOSX SDK for xx
 FROM dockercore/golang-cross:xx-sdk-extras AS osxsdk
 
 # go base image to retrieve /usr/local/go
-FROM ${GO_IMAGE}:${GO_VERSION}-${GO_IMAGE_VARIANT} AS go
-FROM --platform=$BUILDPLATFORM ${GO_IMAGE}:${GO_VERSION}-${GO_IMAGE_VARIANT} AS gocross
+FROM ghcr.io/loong64/${GO_IMAGE}:${GO_VERSION}-${GO_IMAGE_VARIANT} AS go
+FROM --platform=$BUILDPLATFORM ghcr.io/loong64/${GO_IMAGE}:${GO_VERSION}-${GO_IMAGE_VARIANT} AS gocross
 
 # src
-FROM --platform=$BUILDPLATFORM alpine AS src-base
+FROM --platform=$BUILDPLATFORM ghcr.io/loong64/alpine AS src-base
 RUN apk add --no-cache bash curl file git zip tar
 
 FROM src-base AS src
@@ -111,7 +111,7 @@ RUN <<EOT
 EOT
 COPY deb /root/package/debian
 ARG TARGETPLATFORM
-RUN mk-build-deps -t "xx-apt-get -o Debug::pkgProblemResolver=yes --no-install-recommends -y" -i /root/package/debian/control
+RUN mk-build-deps -t "apt-get -o Debug::pkgProblemResolver=yes --no-install-recommends -y" -i /root/package/debian/control
 WORKDIR /root/package
 ARG NIGHTLY_BUILD
 ARG DISTRO_RELEASE
@@ -193,7 +193,7 @@ ARG PKG_REF
 ARG NIGHTLY_BUILD
 WORKDIR /build
 ARG TARGETPLATFORM
-RUN xx-apt-get install -y gcc libc6-dev
+RUN apt-get install -y gcc libc6-dev
 RUN --mount=type=bind,source=scripts/pkg-static-build.sh,target=/usr/local/bin/pkg-static-build \
     --mount=type=bind,from=scripts,source=gen-ver.sh,target=/usr/local/bin/gen-ver \
     --mount=type=bind,from=scripts,source=fix-cc.sh,target=/usr/local/bin/fix-cc \
@@ -213,7 +213,7 @@ ARG PKG_REF
 ARG NIGHTLY_BUILD
 WORKDIR /build
 ARG TARGETPLATFORM
-RUN xx-apt-get install -y gcc libc6-dev
+RUN apt-get install -y gcc libc6-dev
 RUN --mount=type=bind,source=scripts/pkg-static-build.sh,target=/usr/local/bin/pkg-static-build \
     --mount=type=bind,from=scripts,source=gen-ver.sh,target=/usr/local/bin/gen-ver \
     --mount=type=bind,from=scripts,source=fix-cc.sh,target=/usr/local/bin/fix-cc \
