@@ -23,6 +23,8 @@ jobs:
         name: Matrix
         id: matrix
         uses: actions/github-script@v8
+        env:
+          DISABLED_PACKAGES: credential-helpers,model,cagent
         with:
           script: |
             const fs = require('fs');
