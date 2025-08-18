@@ -38,7 +38,7 @@ ARG GO_IMAGE_VARIANT="bookworm"
 FROM scratch AS scripts
 
 # cross compilation helper
-FROM --platform=$BUILDPLATFORM tonistiigi/xx:${XX_VERSION} AS xx
+FROM --platform=$BUILDPLATFORM ghcr.io/loong64/tonistiigi/xx:${XX_VERSION} AS xx
 
 # osxcross contains the MacOSX cross toolchain for xx
 FROM crazymax/osxcross:${OSXCROSS_VERSION} AS osxcross

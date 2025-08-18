@@ -39,7 +39,7 @@ ARG TAGPREFIX="cmd/cli/"
 FROM scratch AS scripts
 
 # cross compilation helper
-FROM --platform=$BUILDPLATFORM tonistiigi/xx:${XX_VERSION} AS xx
+FROM --platform=$BUILDPLATFORM ghcr.io/loong64/tonistiigi/xx:${XX_VERSION} AS xx
 
 # go base image to retrieve /usr/local/go
 FROM ${GO_IMAGE}:${GO_VERSION}-${GO_IMAGE_VARIANT} AS go
