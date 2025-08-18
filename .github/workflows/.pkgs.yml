@@ -21,6 +21,8 @@ jobs:
         name: Set pkgs output
         id: set
         uses: actions/github-script@v8
+        env:
+          DISABLED_PACKAGES: credential-helpers,model,cagent
         with:
           script: |
             const fs = require('fs');
