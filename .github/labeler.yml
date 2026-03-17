@@ -17,9 +17,9 @@ area/pkg/buildx:
   - changed-files:
     - any-glob-to-any-file: 'pkg/buildx/**'
 
-area/pkg/cagent:
+area/pkg/agent:
   - changed-files:
-    - any-glob-to-any-file: 'pkg/cagent/**'
+    - any-glob-to-any-file: 'pkg/agent/**'
 
 area/pkg/compose:
   - changed-files:
@@ -44,4 +44,3 @@ area/pkg/docker-engine:
 area/pkg/model:
   - changed-files:
     - any-glob-to-any-file: 'pkg/model/**'
-
