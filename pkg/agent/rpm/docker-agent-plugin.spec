@@ -13,6 +13,8 @@ Vendor: Docker
 Packager: Docker <support@docker.com>
 
 Enhances: docker-ce-cli
+Provides: cagent = %{version}-%{release}
+Obsoletes: cagent < %{version}-%{release}
 
 BuildRequires: bash
 BuildRequires: gcc
@@ -57,3 +59,5 @@ done
 %postun
 
 %changelog
+* Wed Mar 17 2026 Docker <support@docker.com> - %{version}-%{release}
+- Rename the package to docker-agent-plugin and obsolete cagent

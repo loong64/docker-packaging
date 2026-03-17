@@ -13,6 +13,8 @@ Build-Depends: bash,
 Package: docker-agent-plugin
 Priority: optional
 Architecture: linux-any
+Replaces: cagent
+Breaks: cagent
 Enhances: docker-ce-cli
 Description: Docker Agent plugin for the Docker CLI.
  .
