@@ -36,7 +36,7 @@ pushd ${RPM_BUILD_DIR}/src/agent
 popd
 
 %check
-ver="$(${RPM_BUILD_ROOT}%{_libexecdir}/docker/cli-plugins/docker-agent docker-cli-plugin-metadata | awk '{ gsub(/[\",:]/,\"\")}; $1 == \"Version\" { print $2 }')"; \
+ver="$(${RPM_BUILD_ROOT}%{_libexecdir}/docker/cli-plugins/docker-agent docker-cli-plugin-metadata | awk '{ gsub(/[",:]/,"")}; $1 == "Version" { print $2 }')"; \
 	test "$ver" = "%{_origversion}" && echo "PASS: docker-agent version OK" || (echo "FAIL: docker-agent version ($ver) did not match" && exit 1)
 
 %install
