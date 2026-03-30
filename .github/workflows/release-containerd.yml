@@ -1,5 +1,8 @@
 name: release-containerd
 
+permissions:
+  contents: read
+
 concurrency:
   group: ${{ github.workflow }}-${{ github.ref }}
   cancel-in-progress: true
@@ -56,4 +59,8 @@ jobs:
         PKG_DEB_REVISION=${{ inputs.revision }}
         PKG_RPM_RELEASE=${{ inputs.revision }}
         RUNC_REF=${{ inputs.runc_ref }}
-    secrets: inherit
+    secrets:
+      rh_user: ${{ secrets.RH_USER }}
+      rh_pass: ${{ secrets.RH_PASS }}
+      dockerpublicbot_username: ${{ secrets.DOCKERPUBLICBOT_USERNAME }}
+      dockerpublicbot_write_pat: ${{ secrets.DOCKERPUBLICBOT_WRITE_PAT }}
