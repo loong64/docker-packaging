@@ -1,4 +1,4 @@
-name: build-cagent
+name: build-agent
 
 concurrency:
   group: ${{ github.workflow }}-${{ github.ref }}
@@ -8,27 +8,27 @@ on:
   push:
     branches:
       - 'main'
-      - 'cagent/[0-9]+.[0-9]+'
+      - 'agent/[0-9]+.[0-9]+'
     paths:
       - '.github/workflows/.build.yml'
-      - '.github/workflows/build-cagent.yml'
+      - '.github/workflows/build-agent.yml'
       - 'hack/scripts/**'
-      - 'pkg/cagent/**'
+      - 'pkg/agent/**'
       - 'docker-bake.hcl'
   pull_request:
     branches:
       - 'main'
-      - 'cagent/[0-9]+.[0-9]+'
+      - 'agent/[0-9]+.[0-9]+'
     paths:
       - '.github/workflows/.build.yml'
-      - '.github/workflows/build-cagent.yml'
+      - '.github/workflows/build-agent.yml'
       - 'hack/scripts/**'
-      - 'pkg/cagent/**'
+      - 'pkg/agent/**'
       - 'docker-bake.hcl'
 
 jobs:
   run:
     uses: ./.github/workflows/.build.yml
     with:
-      name: cagent
+      name: agent
     secrets: inherit

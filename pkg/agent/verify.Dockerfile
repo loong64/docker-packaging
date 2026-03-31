@@ -53,7 +53,7 @@ RUN --mount=from=bin,target=/build <<EOT
     )
   done
   set -x
-  cagent version
+  /usr/libexec/docker/cli-plugins/docker-agent version
 EOT
 
 FROM base AS verify-rpm
@@ -84,7 +84,7 @@ RUN --mount=from=bin,target=/build <<EOT
     )
   done
   set -x
-  cagent version
+  /usr/libexec/docker/cli-plugins/docker-agent version
 EOT
 
 FROM base AS verify-static
@@ -112,7 +112,7 @@ RUN --mount=from=bin,target=/build <<EOT
     )
   done
   set -x
-  cagent version
+  docker-agent version
 EOT
 
 FROM verify-${DISTRO_TYPE}

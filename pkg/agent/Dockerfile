@@ -23,9 +23,9 @@ ARG DISTRO_ID="12"
 ARG DISTRO_SUITE="bookworm"
 ARG DISTRO_IMAGE="debian:bookworm"
 
-ARG PKG_NAME="cagent"
-ARG PKG_REPO="https://github.com/docker/cagent.git"
-ARG PKG_REF="master"
+ARG PKG_NAME="docker-agent-plugin"
+ARG PKG_REPO="https://github.com/docker/docker-agent.git"
+ARG PKG_REF="main"
 
 ARG GO_IMAGE="golang"
 ARG GO_VERSION="1.26.1"
@@ -59,8 +59,8 @@ ARG PKG_REF
 RUN git fetch origin "${PKG_REF}" +refs/heads/*:refs/remotes/origin/* +refs/tags/*:refs/tags/* && git checkout -q FETCH_HEAD
 
 FROM src-base AS src-tgz
-RUN --mount=from=src,source=/src,target=/cagent \
-    mkdir /out && tar -C / -zcf /out/cagent.tgz --exclude .git cagent
+RUN --mount=from=src,source=/src,target=/agent \
+    mkdir /out && tar -C / -zcf /out/agent.tgz --exclude .git agent
 
 # metadata
 FROM src-base AS metadata-builder
@@ -115,9 +115,9 @@ RUN --mount=type=bind,source=scripts/pkg-deb-build.sh,target=/usr/local/bin/pkg-
     --mount=type=bind,from=scripts,source=gen-ver.sh,target=/usr/local/bin/gen-ver \
     --mount=type=bind,from=scripts,source=gen-deb-changelog.sh,target=/usr/local/bin/gen-deb-changelog \
     --mount=type=bind,from=scripts,source=fix-cc.sh,target=/usr/local/bin/fix-cc \
-    --mount=type=bind,from=src,source=/src,target=/root/package/cagent,rw \
+    --mount=type=bind,from=src,source=/src,target=/root/package/agent,rw \
     --mount=type=bind,from=go,source=/usr/local/go,target=/usr/local/go \
-    OUTDIR=/out SRCDIR=./cagent pkg-deb-build
+    OUTDIR=/out SRCDIR=./agent pkg-deb-build
 
 # rpm
 FROM ${DISTRO_IMAGE} AS builder-rpm
@@ -151,10 +151,10 @@ ARG SOURCE_DATE_EPOCH
 RUN --mount=type=bind,source=scripts/pkg-rpm-build.sh,target=/usr/local/bin/pkg-rpm-build \
     --mount=type=bind,from=scripts,source=gen-ver.sh,target=/usr/local/bin/gen-ver \
     --mount=type=bind,from=scripts,source=fix-cc.sh,target=/usr/local/bin/fix-cc \
-    --mount=type=bind,from=src-tgz,source=/out/cagent.tgz,target=/root/rpmbuild/SOURCES/cagent.tgz \
-    --mount=type=bind,from=src,source=/src,target=/usr/local/src/cagent \
+    --mount=type=bind,from=src-tgz,source=/out/agent.tgz,target=/root/rpmbuild/SOURCES/agent.tgz \
+    --mount=type=bind,from=src,source=/src,target=/usr/local/src/agent \
     --mount=type=bind,from=go,source=/usr/local/go,target=/usr/local/go \
-    OUTDIR=/out SRCDIR=/usr/local/src/cagent pkg-rpm-build
+    OUTDIR=/out SRCDIR=/usr/local/src/agent pkg-rpm-build
 
 # static
 FROM --platform=$BUILDPLATFORM ${DISTRO_IMAGE} AS builder-static
@@ -192,10 +192,10 @@ ARG TARGETPLATFORM
 RUN --mount=type=bind,source=scripts/pkg-static-build.sh,target=/usr/local/bin/pkg-static-build \
     --mount=type=bind,from=scripts,source=gen-ver.sh,target=/usr/local/bin/gen-ver \
     --mount=type=bind,from=scripts,source=fix-cc.sh,target=/usr/local/bin/fix-cc \
-    --mount=type=bind,from=src,source=/src,target=/usr/local/src/cagent \
+    --mount=type=bind,from=src,source=/src,target=/usr/local/src/agent \
     --mount=type=bind,from=gocross,source=/usr/local/go,target=/usr/local/go,rw \
     --mount=type=bind,from=osxcross,src=/osxsdk,target=/xx-sdk \
-    OUTDIR=/out BUILDDIR=/build SRCDIR=/usr/local/src/cagent pkg-static-build
+    OUTDIR=/out BUILDDIR=/build SRCDIR=/usr/local/src/agent pkg-static-build
 
 FROM builder-${DISTRO_TYPE} AS build-pkg
 ARG BUILDKIT_SBOM_SCAN_STAGE=true

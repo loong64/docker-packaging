@@ -1,4 +1,4 @@
-name: release-cagent
+name: release-agent
 
 concurrency:
   group: ${{ github.workflow }}-${{ github.ref }}
@@ -42,7 +42,7 @@ jobs:
   release:
     uses: ./.github/workflows/.build.yml
     with:
-      name: cagent
+      name: agent
       release: ${{ inputs.release }}
       distros: ${{ inputs.distros }}
       envs: |
