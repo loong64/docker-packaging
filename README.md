@@ -17,6 +17,7 @@ ___
 * [Build](#build)
   * [Requirements](#requirements)
   * [Usage](#usage)
+  * [Remote override](#remote-override)
 * [Contributing](#contributing)
 
 ## Release
@@ -80,6 +81,55 @@ $ PKG_REF=v0.24.0 docker buildx bake pkg-buildx-*
 # previously built.
 $ docker buildx bake --push --set *.tags=dockereng/packaging:buildx-v0.24.0 release-buildx 
 ```
+
+### Remote override
+
+Downstream repositories can reuse this repository as a remote Bake definition
+and extend it with a local `docker-bake.override.hcl` file instead of forking
+the full `docker-bake.hcl`.
+
+Example local override:
+
+```hcl
+variable "PKGS_EXTRA" {
+  default = ["my-package"]
+}
+
+variable "PKG_PLATFORMS_EXTRA" {
+  default = {
+    my-package = ["linux/amd64"]
+  }
+}
+
+variable "PKG_CONTEXTS_EXTRA" {
+  default = {
+    my-package = "cwd://pkg/my-package"
+  }
+}
+
+target "_pkg-my-package" {
+  dockerfile = "cwd://pkg/my-package/Dockerfile"
+  args = {
+    PKG_NAME = "my-package"
+    PKG_REPO = "https://github.com/example/my-package.git"
+    PKG_REF = "main"
+  }
+}
+```
+
+Example invocation from the downstream repository:
+
+```shell
+$ docker buildx bake \
+  -f docker-bake.hcl \
+  -f cwd://docker-bake.override.hcl \
+  "https://github.com/docker/packaging.git#main" \
+  pkg-my-package-debian12
+```
+
+Use the `cwd://` prefix for local files and directories when combining a local
+override with a remote Bake definition. Without it, Bake resolves paths relative
+to the remote context instead of the current working directory.
 
 ## Contributing
 
