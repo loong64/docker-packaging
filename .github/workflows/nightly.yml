@@ -1,6 +1,9 @@
 # This workflow runs nighly builds for each package.
 name: nightly
 
+permissions:
+  contents: read
+
 concurrency:
   group: ${{ github.workflow }}-${{ github.ref }}
   cancel-in-progress: true
@@ -27,4 +30,8 @@ jobs:
       release: pushonly
       envs: |
         NIGHTLY_BUILD=1
-    secrets: inherit
+    secrets:
+      rh_user: ${{ secrets.RH_USER }}
+      rh_pass: ${{ secrets.RH_PASS }}
+      dockerpublicbot_username: ${{ secrets.DOCKERPUBLICBOT_USERNAME }}
+      dockerpublicbot_write_pat: ${{ secrets.DOCKERPUBLICBOT_WRITE_PAT }}
