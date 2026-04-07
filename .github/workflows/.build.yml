@@ -1,9 +1,6 @@
 # reusable workflow
 name: .build
 
-permissions:
-  contents: read
-
 on:
   workflow_call:
     inputs:

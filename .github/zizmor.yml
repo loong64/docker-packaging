@@ -1,3 +1,10 @@
 rules:
+  # rule does not apply to reusable worfklows where permissions are defined by
+  # the caller workflow and not the reusable workflow itself
+  excessive-permissions:
+    ignore:
+      - .build.yml
+      - .pkgs.yml
+
   secrets-outside-env: # FIXME: remove this rule when zizmor 1.24.0 is released, fixing the right persona attached to this rule: https://github.com/zizmorcore/zizmor/pull/1783
     disable: true
