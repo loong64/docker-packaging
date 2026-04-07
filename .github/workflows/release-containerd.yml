@@ -49,6 +49,8 @@ on:
 jobs:
   release:
     uses: ./.github/workflows/.build.yml
+    permissions:
+      contents: write # needed to create release and upload artifacts
     with:
       name: containerd
       release: ${{ inputs.release }}
