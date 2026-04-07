@@ -494,7 +494,7 @@ target "_pkg-buildx" {
     PKG_NAME = PKG_NAME != null && PKG_NAME != "" ? PKG_NAME : "docker-buildx-plugin"
     PKG_REPO = PKG_REPO != null && PKG_REPO != "" ? PKG_REPO : "https://github.com/docker/buildx.git"
     PKG_REF = PKG_REF != null && PKG_REF != "" ? PKG_REF : "master"
-    GO_VERSION = GO_VERSION != null && GO_VERSION != "" ? GO_VERSION : "1.25" # https://github.com/docker/buildx/blob/master/Dockerfile
+    GO_VERSION = GO_VERSION != null && GO_VERSION != "" ? GO_VERSION : "1.26" # https://github.com/docker/buildx/blob/master/Dockerfile
     GO_IMAGE_VARIANT = GO_IMAGE_VARIANT != null && GO_IMAGE_VARIANT != "" ? GO_IMAGE_VARIANT : "bookworm"
     PKG_DEB_EPOCH = PKG_DEB_EPOCH != null && PKG_DEB_EPOCH != "" ? PKG_DEB_EPOCH : ""
     PKG_REMOTE_DOCKERFILE = "Dockerfile"
@@ -518,7 +518,7 @@ target "_pkg-containerd" {
     PKG_NAME = PKG_NAME != null && PKG_NAME != "" ? PKG_NAME : "containerd.io"
     PKG_REPO = PKG_REPO != null && PKG_REPO != "" ? PKG_REPO : "https://github.com/containerd/containerd.git"
     PKG_REF = PKG_REF != null && PKG_REF != "" ? PKG_REF : "main"
-    GO_VERSION = GO_VERSION != null && GO_VERSION != "" ? GO_VERSION : "1.25.8" # https://github.com/containerd/containerd/blob/main/.github/workflows/release/Dockerfile
+    GO_VERSION = GO_VERSION != null && GO_VERSION != "" ? GO_VERSION : "1.26.0" # https://github.com/containerd/containerd/blob/main/.github/workflows/release/Dockerfile
     GO_IMAGE_VARIANT = GO_IMAGE_VARIANT != null && GO_IMAGE_VARIANT != "" ? GO_IMAGE_VARIANT : "bookworm"
     PKG_DEB_EPOCH = PKG_DEB_EPOCH != null && PKG_DEB_EPOCH != "" ? PKG_DEB_EPOCH : ""
     RUNC_REF = RUNC_REF != null && RUNC_REF != "" ? RUNC_REF : null
@@ -594,9 +594,9 @@ function "pkgPlatforms" {
     buildx = ["darwin/amd64", "darwin/arm64", "linux/amd64", "linux/arm/v6", "linux/arm/v7", "linux/arm64", "linux/ppc64le", "linux/riscv64", "linux/s390x", "windows/amd64", "windows/arm64"]
     # https://github.com/docker/compose/blob/c626befee1596abcc74578cb10dd96ae1667f76f/docker-bake.hcl#L112-L124
     compose = ["darwin/amd64", "darwin/arm64", "linux/amd64", "linux/arm/v6", "linux/arm/v7", "linux/arm64", "linux/ppc64le", "linux/riscv64", "linux/s390x", "windows/amd64", "windows/arm64"]
-    # https://github.com/containerd/containerd/blob/87742bd35f6ddc47c638a448c271b7ccf8df9010/.github/workflows/ci.yml#L145-L165
-    # https://github.com/containerd/containerd/blob/87742bd35f6ddc47c638a448c271b7ccf8df9010/.github/workflows/ci.yml#L135-L137
-    containerd = ["linux/amd64", "linux/arm/v6", "linux/arm/v7", "linux/arm64", "linux/ppc64le", "linux/s390x", "windows/amd64", "windows/arm64", "windows/arm/v7"]
+    # https://github.com/containerd/containerd/blob/e373060a953aeaa35554e2f667043fed73ff6248/.github/workflows/ci.yml#L142-L162
+    # https://github.com/containerd/containerd/blob/e373060a953aeaa35554e2f667043fed73ff6248/.github/workflows/ci.yml#L133-L134
+    containerd = ["linux/amd64", "linux/arm/v6", "linux/arm/v7", "linux/arm64", "linux/ppc64le", "linux/s390x", "windows/amd64", "windows/arm64"]
     # https://github.com/docker/docker-credential-helpers/blob/f9d3010165b642df37215b1be945552f2c6f0e3b/docker-bake.hcl#L56-L66
     credential-helpers = ["darwin/amd64", "darwin/arm64", "linux/amd64", "linux/arm/v6", "linux/arm/v7", "linux/arm64", "linux/ppc64le", "linux/s390x", "windows/amd64"]
     # https://github.com/docker/cli/blob/84038691220e7ba3329a177e4e3357b4ee0e3a52/docker-bake.hcl#L30-L42
