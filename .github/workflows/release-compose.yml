@@ -47,6 +47,7 @@ jobs:
     permissions:
       contents: write # needed to create release and upload artifacts
       id-token: write # needed to sign attestations
+      packages: write
     with:
       name: compose
       release: ${{ inputs.release }}

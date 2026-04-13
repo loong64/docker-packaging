@@ -37,6 +37,7 @@ jobs:
     permissions:
       contents: read
       id-token: write
+      packages: write
     with:
       name: docker-engine
 
@@ -45,5 +46,6 @@ jobs:
     permissions:
       contents: read
       id-token: write
+      packages: write
     with:
       name: docker-cli
