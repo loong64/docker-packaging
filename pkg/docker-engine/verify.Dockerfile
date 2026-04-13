@@ -14,13 +14,13 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-ARG XX_VERSION="1.9.0"
+ARG XX_VERSION="master"
 
 ARG DISTRO_TYPE="deb"
 ARG DISTRO_IMAGE="debian:bookworm"
 
 # cross compilation helper
-FROM --platform=$BUILDPLATFORM tonistiigi/xx:${XX_VERSION} AS xx
+FROM --platform=$BUILDPLATFORM ghcr.io/loong64/tonistiigi/xx:${XX_VERSION} AS xx
 
 FROM scratch AS bin
 FROM scratch AS scripts

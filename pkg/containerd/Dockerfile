@@ -14,7 +14,7 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-ARG XX_VERSION="1.9.0"
+ARG XX_VERSION="master"
 
 # https://github.com/containerd/containerd/blob/main/.github/workflows/ci.yml#L111
 ARG MD2MAN_VERSION="v2.0.2"
@@ -43,10 +43,10 @@ ARG GO_IMAGE_VARIANT="bookworm"
 FROM scratch AS scripts
 
 # cross compilation helper
-FROM --platform=$BUILDPLATFORM tonistiigi/xx:${XX_VERSION} AS xx
+FROM --platform=$BUILDPLATFORM ghcr.io/loong64/tonistiigi/xx:${XX_VERSION} AS xx
 
 # go base image to retrieve /usr/local/go
-FROM ${GO_IMAGE}:${GO_VERSION}-${GO_IMAGE_VARIANT} AS go
+FROM ghcr.io/loong64/${GO_IMAGE}:${GO_VERSION}-${GO_IMAGE_VARIANT} AS go
 FROM --platform=$BUILDPLATFORM ${GO_IMAGE}:${GO_VERSION}-${GO_IMAGE_VARIANT} AS gocross
 
 # md2man
@@ -59,7 +59,7 @@ RUN go install github.com/cpuguy83/go-md2man/v2@${MD2MAN_VERSION}
 
 # src
 FROM --platform=$BUILDPLATFORM alpine AS src-base
-RUN apk add --no-cache bash curl file git zip tar
+RUN apk add --no-cache bash curl file git zip tar patch
 
 FROM src-base AS src
 WORKDIR /src
