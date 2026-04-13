@@ -14,7 +14,7 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-ARG XX_VERSION="1.9.0"
+ARG XX_VERSION="master"
 
 # https://github.com/moby/moby/blob/master/Dockerfile#L157
 ARG GOWINRES_VERSION="v0.3.1"
@@ -41,14 +41,14 @@ ARG TAGPREFIX="docker-"
 FROM scratch AS scripts
 
 # cross compilation helper
-FROM --platform=$BUILDPLATFORM tonistiigi/xx:${XX_VERSION} AS xx
+FROM --platform=$BUILDPLATFORM ghcr.io/loong64/tonistiigi/xx:${XX_VERSION} AS xx
 
 # go base image to retrieve /usr/local/go
-FROM ${GO_IMAGE}:${GO_VERSION}-${GO_IMAGE_VARIANT} AS go
-FROM --platform=$BUILDPLATFORM ${GO_IMAGE}:${GO_VERSION}-${GO_IMAGE_VARIANT} AS gocross
+FROM ghcr.io/loong64/${GO_IMAGE}:${GO_VERSION}-${GO_IMAGE_VARIANT} AS go
+FROM --platform=$BUILDPLATFORM ghcr.io/loong64/${GO_IMAGE}:${GO_VERSION}-${GO_IMAGE_VARIANT} AS gocross
 
 # src
-FROM --platform=$BUILDPLATFORM alpine AS src-base
+FROM --platform=$BUILDPLATFORM ghcr.io/loong64/alpine AS src-base
 RUN apk add --no-cache bash curl file git zip tar
 
 FROM src-base AS src
@@ -124,6 +124,7 @@ ARG PKG_DEB_REVISION
 ARG PKG_DEB_EPOCH
 ARG SOURCE_DATE_EPOCH
 ARG TAGPREFIX
+ENV CMAKE_POLICY_VERSION_MINIMUM=3.5
 RUN --mount=type=bind,source=scripts/pkg-deb-build.sh,target=/usr/local/bin/pkg-deb-build \
     --mount=type=bind,source=scripts/check-gomod.sh,target=/usr/local/bin/check-gomod \
     --mount=type=bind,from=scripts,source=gen-ver.sh,target=/usr/local/bin/gen-ver \

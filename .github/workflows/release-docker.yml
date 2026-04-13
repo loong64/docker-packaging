@@ -59,6 +59,7 @@ jobs:
     permissions:
       contents: write # needed to create release and upload artifacts
       id-token: write # needed to sign attestations
+      packages: write
     with:
       name: docker-engine
       release: ${{ inputs.release }}
@@ -79,6 +80,7 @@ jobs:
     permissions:
       contents: write # needed to create release and upload artifacts
       id-token: write # needed to sign attestations
+      packages: write
     with:
       name: docker-cli
       release: ${{ inputs.release }}
