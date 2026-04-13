@@ -23,6 +23,7 @@
 : "${OUTDIR=/out}"
 
 : "${TAGPREFIX=}"
+: "${MODULE_NAME=github.com/docker/buildx}"
 
 set -e
 
@@ -51,7 +52,7 @@ mkdir -p ${BUILDDIR}/${PKG_NAME}
 (
   set -x
   pushd ${SRCDIR}
-    go build -trimpath -ldflags="-s -w -X ${PKG_NAME}/version.Version=${GENVER_VERSION} -X ${PKG_NAME}/version.Revision=${GENVER_COMMIT} -X ${PKG_NAME}/version.Package=${PKG_NAME}" -o /tmp/buildx-build/docker-buildx ./cmd/buildx
+    go build -trimpath -ldflags="-s -w -X ${MODULE_NAME}/version.Version=${GENVER_VERSION} -X ${MODULE_NAME}/version.Revision=${GENVER_COMMIT} -X ${MODULE_NAME}/version.Package=${MODULE_NAME}" -o /tmp/buildx-build/docker-buildx ./cmd/buildx
     mv "/tmp/buildx-build/docker-buildx" "${BUILDDIR}/${PKG_NAME}/docker-buildx${binext}"
   popd
   xx-verify --static "${BUILDDIR}/${PKG_NAME}/docker-buildx${binext}"
