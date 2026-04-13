@@ -34,5 +34,6 @@ jobs:
     uses: ./.github/workflows/.build.yml
     permissions:
       contents: read
+      packages: write
     with:
       name: containerd
