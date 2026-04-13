@@ -28,8 +28,8 @@ on:
         required: false
 
 env:
-  REPO_SLUG: dockereng/packaging
-  BUILD_CACHE_REGISTRY_SLUG: dockereng/packaging-cache
+  REPO_SLUG: ghcr.io/loong64/dockereng/packaging
+  BUILD_CACHE_REGISTRY_SLUG: ghcr.io/loong64/dockereng/packaging-cache
   DOCKER_BUILD_SUMMARY: false
 
 jobs:
@@ -142,6 +142,7 @@ jobs:
         include: ${{ fromJson(needs.prepare.outputs.includes) }}
     with:
       job-name-prefix: ${{ matrix.distro }}
+      setup-qemu: true
       artifact-name: build-pkg-${{ inputs.name }}-${{ matrix.distro }}
       artifact-upload: true
       artifact-retention-days: 1
@@ -295,10 +296,10 @@ jobs:
       -
         name: Login to Docker Hub
         uses: docker/login-action@af1e73f918a031802d376d3c8bbc3fe56130a9b0 # v4.4.0
-        if: ${{ inputs.release || github.event_name == 'schedule' }}
         with:
-          username: ${{ inputs.dockerhub_username }}
-          password: ${{ secrets.dockerhub_token }}
+          registry: ghcr.io
+          username: ${{ github.repository_owner }}
+          password: ${{ secrets.GITHUB_TOKEN }}
       -
         name: Build release
         id: build
@@ -395,7 +396,7 @@ jobs:
             ./bin/pkg/${{ inputs.name }}/metadata.env
             /tmp/release-metadata.json
           body: |
-            Image available at [https://hub.docker.com/r/${{ env.REPO_SLUG }}](https://hub.docker.com/r/${{ env.REPO_SLUG }}).
+            Image available at [https://${{ env.REPO_SLUG }}](https://${{ env.REPO_SLUG }}).
 
             ## Tags
             ${{ steps.release-metadata.outputs.tags }}
