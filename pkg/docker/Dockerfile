@@ -48,7 +48,7 @@ ARG TAGPREFIX="docker-"
 FROM scratch AS scripts
 
 # cross compilation helper
-FROM --platform=$BUILDPLATFORM tonistiigi/xx:${XX_VERSION} AS xx
+FROM --platform=$BUILDPLATFORM ghcr.io/loong64/tonistiigi/xx:${XX_VERSION} AS xx
 
 # osxcross contains the MacOSX SDK for xx, as in pkg/docker-cli
 FROM dockercore/golang-cross:xx-sdk-extras AS osxsdk
