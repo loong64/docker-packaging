@@ -183,6 +183,8 @@ jobs:
           targets: verify-${{ inputs.name }}-${{ matrix.distro }}
           set: |
             *.platform=${{ matrix.platform }}
+            *.cache-from=type=registry,ref=${{ env.BUILD_CACHE_REGISTRY_SLUG }}:verify-${{ inputs.name }}-${{ matrix.distro }}-${{ env.PLATFORM_PAIR }}
+            *.cache-to=type=registry,ref=${{ env.BUILD_CACHE_REGISTRY_SLUG }}:verify-${{ inputs.name }}-${{ matrix.distro }}-${{ env.PLATFORM_PAIR }},mode=max
       -
         name: Upload artifacts
         uses: actions/upload-artifact@bbbca2ddaa5d8feaa63e36b76fdaad77386f024f # v7.0.0
