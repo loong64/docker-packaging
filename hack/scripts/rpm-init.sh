@@ -45,6 +45,9 @@ if [[ "$pkgrelease" = rockylinux* ]]; then
 fi
 
 case "$pkgrelease" in
+  anolis23)
+    dnf install -y git rpm-build rpmlint dnf-plugins-core anolis-epao-release libatomic-static
+    ;;
   centos9)
     rpm --import /etc/pki/rpm-gpg/RPM-GPG-KEY-centosofficial
     dnf install -y git rpm-build rpmlint dnf-plugins-core epel-release epel-next-release
@@ -53,6 +56,18 @@ case "$pkgrelease" in
   centos10)
     dnf install -y git rpm-build dnf-plugins-core
     dnf config-manager --set-enabled crb
+    ;;
+  kylin11)
+    dnf install -y git rpm-build rpmlint dnf-plugins-core
+    ;;
+  loongnix23)
+    dnf install -y git rpm-build dnf-plugins-core
+    ;;
+  openeuler24)
+    dnf install -y git rpm-build rpmlint dnf-plugins-core
+    ;;
+  opencloudos*)
+    dnf install -y git rpm-build dnf-plugins-core systemd-devel
     ;;
   oraclelinux8)
     dnf install -y git rpm-build rpmlint dnf-plugins-core oraclelinux-release-el8 oracle-epel-release-el8
