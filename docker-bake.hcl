@@ -17,31 +17,15 @@ variable "DISTROS" {
   default = [
     "static",
 
-    "debian11",
-    "debian12",
     "debian13",
-    "ubuntu2204",
-    "ubuntu2404",
-    "ubuntu2510",
-    "ubuntu2604",
+    "debian14",
 
-    "almalinux8",
-    "almalinux9",
-    "almalinux10",
-    "centos9",
-    "centos10",
-    "fedora42",
-    "fedora43",
-    "fedora44",
-    "oraclelinux8",
-    "oraclelinux9",
-    "oraclelinux10",
-    "rhel8",
-    "rhel9",
-    "rhel10",
-    "rockylinux8",
-    "rockylinux9",
-    "rockylinux10"
+    "anolis23",
+    "loongnix23",
+    "kylin11",
+    "opencloudos9",
+    "opencloudos23",
+    "openeuler24"
   ]
 }
 
@@ -153,7 +137,7 @@ variable "GO_VERSION" {
 }
 variable "GO_IMAGE_VARIANT" {
   description = "Go image variant to use for building packages."
-  default = "bookworm"
+  default = "trixie"
 }
 
 variable "LOCAL_PLATFORM" {
@@ -163,11 +147,11 @@ variable "LOCAL_PLATFORM" {
 
 variable "BUILD_CACHE_REGISTRY_SLUG" {
   description = "Slug for the registry cache exporter."
-  default = "dockereng/packaging-cache"
+  default = "ghcr.io/loong64/dockereng/packaging-cache"
 }
 variable "BUILD_CACHE_REGISTRY_PUSH" {
   description = "Set to 1 to enable pushing to the registry cache exporter."
-  default = ""
+  default = "1"
 }
 
 #
@@ -181,31 +165,7 @@ target "_distro-static" {
     DISTRO_RELEASE = "static"
     DISTRO_ID = ""
     DISTRO_SUITE = ""
-    DISTRO_IMAGE = DISTRO_IMAGE != null && DISTRO_IMAGE != "" ? DISTRO_IMAGE : "debian:trixie"
-    TEST_ONLY = "0"
-  }
-}
-
-target "_distro-debian11" {
-  args = {
-    DISTRO_NAME = "debian11"
-    DISTRO_TYPE = "deb"
-    DISTRO_RELEASE = "debian"
-    DISTRO_ID = "11"
-    DISTRO_SUITE = "bullseye"
-    DISTRO_IMAGE = DISTRO_IMAGE != null && DISTRO_IMAGE != "" ? DISTRO_IMAGE : "debian:bullseye"
-    TEST_ONLY = "0"
-  }
-}
-
-target "_distro-debian12" {
-  args = {
-    DISTRO_NAME = "debian12"
-    DISTRO_TYPE = "deb"
-    DISTRO_RELEASE = "debian"
-    DISTRO_ID = "12"
-    DISTRO_SUITE = "bookworm"
-    DISTRO_IMAGE = DISTRO_IMAGE != null && DISTRO_IMAGE != "" ? DISTRO_IMAGE : "debian:bookworm"
+    DISTRO_IMAGE = DISTRO_IMAGE != null && DISTRO_IMAGE != "" ? DISTRO_IMAGE : "ghcr.io/loong64/debian:trixie"
     TEST_ONLY = "0"
   }
 }
@@ -217,260 +177,92 @@ target "_distro-debian13" {
     DISTRO_RELEASE = "debian"
     DISTRO_ID = "13"
     DISTRO_SUITE = "trixie"
-    DISTRO_IMAGE = DISTRO_IMAGE != null && DISTRO_IMAGE != "" ? DISTRO_IMAGE : "debian:trixie"
+    DISTRO_IMAGE = DISTRO_IMAGE != null && DISTRO_IMAGE != "" ? DISTRO_IMAGE : "ghcr.io/loong64/debian:trixie"
     TEST_ONLY = "0"
   }
 }
 
-target "_distro-ubuntu2204" {
+target "_distro-debian14" {
   args = {
-    DISTRO_NAME = "ubuntu2204"
+    DISTRO_NAME = "debian14"
     DISTRO_TYPE = "deb"
-    DISTRO_RELEASE = "ubuntu"
-    DISTRO_ID = "22.04"
-    DISTRO_SUITE = "jammy"
-    DISTRO_IMAGE = DISTRO_IMAGE != null && DISTRO_IMAGE != "" ? DISTRO_IMAGE : "ubuntu:jammy"
+    DISTRO_RELEASE = "debian"
+    DISTRO_ID = "14"
+    DISTRO_SUITE = "forky"
+    DISTRO_IMAGE = DISTRO_IMAGE != null && DISTRO_IMAGE != "" ? DISTRO_IMAGE : "ghcr.io/loong64/debian:forky"
     TEST_ONLY = "0"
   }
 }
 
-target "_distro-ubuntu2404" {
+target "_distro-anolis23" {
   args = {
-    DISTRO_NAME = "ubuntu2404"
-    DISTRO_TYPE = "deb"
-    DISTRO_RELEASE = "ubuntu"
-    DISTRO_ID = "24.04"
-    DISTRO_SUITE = "noble"
-    DISTRO_IMAGE = DISTRO_IMAGE != null && DISTRO_IMAGE != "" ? DISTRO_IMAGE : "ubuntu:noble"
-    TEST_ONLY = "0"
-  }
-}
-
-target "_distro-ubuntu2510" {
-  args = {
-    DISTRO_NAME = "ubuntu2510"
-    DISTRO_TYPE = "deb"
-    DISTRO_RELEASE = "ubuntu"
-    DISTRO_ID = "25.10"
-    DISTRO_SUITE = "questing"
-    DISTRO_IMAGE = DISTRO_IMAGE != null && DISTRO_IMAGE != "" ? DISTRO_IMAGE : "ubuntu:questing"
-    TEST_ONLY = "0"
-  }
-}
-
-target "_distro-ubuntu2604" {
-  args = {
-    DISTRO_NAME = "ubuntu2604"
-    DISTRO_TYPE = "deb"
-    DISTRO_RELEASE = "ubuntu"
-    DISTRO_ID = "26.04"
-    DISTRO_SUITE = "resolute"
-    DISTRO_IMAGE = DISTRO_IMAGE != null && DISTRO_IMAGE != "" ? DISTRO_IMAGE : "ubuntu:resolute"
-    TEST_ONLY = "0"
-  }
-}
-
-target "_distro-almalinux8" {
-  args = {
-    DISTRO_NAME = "almalinux8"
+    DISTRO_NAME = "anolis23"
     DISTRO_TYPE = "rpm"
-    DISTRO_RELEASE = "almalinux"
-    DISTRO_ID = "8"
-    DISTRO_SUITE = "8"
-    DISTRO_IMAGE = DISTRO_IMAGE != null && DISTRO_IMAGE != "" ? DISTRO_IMAGE : "almalinux:8"
-    TEST_ONLY = "1"
+    DISTRO_RELEASE = "anolis"
+    DISTRO_ID = "23"
+    DISTRO_SUITE = "23"
+    DISTRO_IMAGE = DISTRO_IMAGE != null && DISTRO_IMAGE != "" ? DISTRO_IMAGE : "ghcr.io/loong64/anolis:23"
+    TEST_ONLY = "0"
   }
 }
 
-target "_distro-almalinux9" {
+target "_distro-loongnix23" {
   args = {
-    DISTRO_NAME = "almalinux9"
+    DISTRO_NAME = "loongnix23"
     DISTRO_TYPE = "rpm"
-    DISTRO_RELEASE = "almalinux"
+    DISTRO_RELEASE = "loongnix"
+    DISTRO_ID = "23"
+    DISTRO_SUITE = "23"
+    DISTRO_IMAGE = DISTRO_IMAGE != null && DISTRO_IMAGE != "" ? DISTRO_IMAGE : "ghcr.io/loong64/loongnix:23"
+    TEST_ONLY = "0"
+  }
+}
+
+target "_distro-kylin11" {
+  args = {
+    DISTRO_NAME = "kylin11"
+    DISTRO_TYPE = "rpm"
+    DISTRO_RELEASE = "kylin"
+    DISTRO_ID = "11"
+    DISTRO_SUITE = "11"
+    DISTRO_IMAGE = DISTRO_IMAGE != null && DISTRO_IMAGE != "" ? DISTRO_IMAGE : "ghcr.io/loong64/kylin:11"
+    TEST_ONLY = "0"
+  }
+}
+
+target "_distro-opencloudos9" {
+  args = {
+    DISTRO_NAME = "opencloudos9"
+    DISTRO_TYPE = "rpm"
+    DISTRO_RELEASE = "opencloudos"
     DISTRO_ID = "9"
     DISTRO_SUITE = "9"
-    DISTRO_IMAGE = DISTRO_IMAGE != null && DISTRO_IMAGE != "" ? DISTRO_IMAGE : "almalinux:9"
-    TEST_ONLY = "1"
-  }
-}
-
-target "_distro-almalinux10" {
-  args = {
-    DISTRO_NAME = "almalinux10"
-    DISTRO_TYPE = "rpm"
-    DISTRO_RELEASE = "almalinux"
-    DISTRO_ID = "10"
-    DISTRO_SUITE = "10"
-    DISTRO_IMAGE = DISTRO_IMAGE != null && DISTRO_IMAGE != "" ? DISTRO_IMAGE : "almalinux:10"
-    TEST_ONLY = "1"
-  }
-}
-
-target "_distro-centos9" {
-  args = {
-    DISTRO_NAME = "centos9"
-    DISTRO_TYPE = "rpm"
-    DISTRO_RELEASE = "centos"
-    DISTRO_ID = "9"
-    DISTRO_SUITE = "9"
-    DISTRO_IMAGE = DISTRO_IMAGE != null && DISTRO_IMAGE != "" ? DISTRO_IMAGE : "quay.io/centos/centos:stream9"
+    DISTRO_IMAGE = DISTRO_IMAGE != null && DISTRO_IMAGE != "" ? DISTRO_IMAGE : "ghcr.io/loong64/opencloudos:9"
     TEST_ONLY = "0"
   }
 }
 
-target "_distro-centos10" {
+target "_distro-opencloudos23" {
   args = {
-    DISTRO_NAME = "centos10"
+    DISTRO_NAME = "opencloudos23"
     DISTRO_TYPE = "rpm"
-    DISTRO_RELEASE = "centos"
-    DISTRO_ID = "10"
-    DISTRO_SUITE = "10"
-    DISTRO_IMAGE = DISTRO_IMAGE != null && DISTRO_IMAGE != "" ? DISTRO_IMAGE : "quay.io/centos/centos:stream10"
+    DISTRO_RELEASE = "opencloudos"
+    DISTRO_ID = "23"
+    DISTRO_SUITE = "23"
+    DISTRO_IMAGE = DISTRO_IMAGE != null && DISTRO_IMAGE != "" ? DISTRO_IMAGE : "ghcr.io/loong64/opencloudos:23"
     TEST_ONLY = "0"
   }
 }
 
-target "_distro-fedora42" {
+target "_distro-openeuler24" {
   args = {
-    DISTRO_NAME = "fedora42"
+    DISTRO_NAME = "openeuler24"
     DISTRO_TYPE = "rpm"
-    DISTRO_RELEASE = "fedora"
-    DISTRO_ID = "42"
-    DISTRO_SUITE = "42"
-    DISTRO_IMAGE = DISTRO_IMAGE != null && DISTRO_IMAGE != "" ? DISTRO_IMAGE : "fedora:42"
+    DISTRO_RELEASE = "openeuler"
+    DISTRO_ID = "24"
+    DISTRO_SUITE = "24"
+    DISTRO_IMAGE = DISTRO_IMAGE != null && DISTRO_IMAGE != "" ? DISTRO_IMAGE : "ghcr.io/loong64/openeuler:24"
     TEST_ONLY = "0"
-  }
-}
-
-target "_distro-fedora43" {
-  args = {
-    DISTRO_NAME = "fedora43"
-    DISTRO_TYPE = "rpm"
-    DISTRO_RELEASE = "fedora"
-    DISTRO_ID = "43"
-    DISTRO_SUITE = "43"
-    DISTRO_IMAGE = DISTRO_IMAGE != null && DISTRO_IMAGE != "" ? DISTRO_IMAGE : "fedora:43"
-    TEST_ONLY = "0"
-  }
-}
-
-target "_distro-fedora44" {
-  args = {
-    DISTRO_NAME = "fedora44"
-    DISTRO_TYPE = "rpm"
-    DISTRO_RELEASE = "fedora"
-    DISTRO_ID = "44"
-    DISTRO_SUITE = "44"
-    DISTRO_IMAGE = DISTRO_IMAGE != null && DISTRO_IMAGE != "" ? DISTRO_IMAGE : "fedora:44"
-    TEST_ONLY = "0"
-  }
-}
-
-target "_distro-oraclelinux8" {
-  args = {
-    DISTRO_NAME = "oraclelinux8"
-    DISTRO_TYPE = "rpm"
-    DISTRO_RELEASE = "oraclelinux"
-    DISTRO_ID = "8"
-    DISTRO_SUITE = "8"
-    DISTRO_IMAGE = DISTRO_IMAGE != null && DISTRO_IMAGE != "" ? DISTRO_IMAGE : "oraclelinux:8"
-    TEST_ONLY = "1"
-  }
-}
-
-target "_distro-oraclelinux9" {
-  args = {
-    DISTRO_NAME = "oraclelinux9"
-    DISTRO_TYPE = "rpm"
-    DISTRO_RELEASE = "oraclelinux"
-    DISTRO_ID = "9"
-    DISTRO_SUITE = "9"
-    DISTRO_IMAGE = DISTRO_IMAGE != null && DISTRO_IMAGE != "" ? DISTRO_IMAGE : "oraclelinux:9"
-    TEST_ONLY = "1"
-  }
-}
-
-target "_distro-oraclelinux10" {
-  args = {
-    DISTRO_NAME = "oraclelinux10"
-    DISTRO_TYPE = "rpm"
-    DISTRO_RELEASE = "oraclelinux"
-    DISTRO_ID = "10"
-    DISTRO_SUITE = "10"
-    DISTRO_IMAGE = DISTRO_IMAGE != null && DISTRO_IMAGE != "" ? DISTRO_IMAGE : "oraclelinux:10"
-    TEST_ONLY = "1"
-  }
-}
-
-target "_distro-rhel8" {
-  args = {
-    DISTRO_NAME = "rhel8"
-    DISTRO_TYPE = "rpm"
-    DISTRO_RELEASE = "rhel"
-    DISTRO_ID = "8"
-    DISTRO_SUITE = "8"
-    DISTRO_IMAGE = DISTRO_IMAGE != null && DISTRO_IMAGE != "" ? DISTRO_IMAGE : "registry.access.redhat.com/ubi8/ubi"
-    TEST_ONLY = "0"
-  }
-}
-
-target "_distro-rhel9" {
-  args = {
-    DISTRO_NAME = "rhel9"
-    DISTRO_TYPE = "rpm"
-    DISTRO_RELEASE = "rhel"
-    DISTRO_ID = "9"
-    DISTRO_SUITE = "9"
-    DISTRO_IMAGE = DISTRO_IMAGE != null && DISTRO_IMAGE != "" ? DISTRO_IMAGE : "registry.access.redhat.com/ubi9/ubi"
-    TEST_ONLY = "0"
-  }
-}
-
-target "_distro-rhel10" {
-  args = {
-    DISTRO_NAME = "rhel10"
-    DISTRO_TYPE = "rpm"
-    DISTRO_RELEASE = "rhel"
-    DISTRO_ID = "10"
-    DISTRO_SUITE = "10"
-    DISTRO_IMAGE = DISTRO_IMAGE != null && DISTRO_IMAGE != "" ? DISTRO_IMAGE : "registry.access.redhat.com/ubi10/ubi"
-    TEST_ONLY = "0"
-  }
-}
-
-target "_distro-rockylinux8" {
-  args = {
-    DISTRO_NAME = "rockylinux8"
-    DISTRO_TYPE = "rpm"
-    DISTRO_RELEASE = "rockylinux"
-    DISTRO_ID = "8"
-    DISTRO_SUITE = "8"
-    DISTRO_IMAGE = DISTRO_IMAGE != null && DISTRO_IMAGE != "" ? DISTRO_IMAGE : "rockylinux/rockylinux:8"
-    TEST_ONLY = "1"
-  }
-}
-
-target "_distro-rockylinux9" {
-  args = {
-    DISTRO_NAME = "rockylinux9"
-    DISTRO_TYPE = "rpm"
-    DISTRO_RELEASE = "rockylinux"
-    DISTRO_ID = "9"
-    DISTRO_SUITE = "9"
-    DISTRO_IMAGE = DISTRO_IMAGE != null && DISTRO_IMAGE != "" ? DISTRO_IMAGE : "rockylinux/rockylinux:9"
-    TEST_ONLY = "1"
-  }
-}
-
-target "_distro-rockylinux10" {
-  args = {
-    DISTRO_NAME = "rockylinux10"
-    DISTRO_TYPE = "rpm"
-    DISTRO_RELEASE = "rockylinux"
-    DISTRO_ID = "10"
-    DISTRO_SUITE = "10"
-    DISTRO_IMAGE = DISTRO_IMAGE != null && DISTRO_IMAGE != "" ? DISTRO_IMAGE : "rockylinux/rockylinux:10"
-    TEST_ONLY = "1"
   }
 }
 
@@ -486,38 +278,23 @@ function "distroPlatforms" {
       lookup({
         static = pkgPlatforms(pkg)
 
-        debian11 = ["linux/386", "linux/amd64", "linux/arm64", "linux/arm/v7", "linux/mips64le", "linux/ppc64le", "linux/s390x"]
-        debian12 = ["linux/386", "linux/amd64", "linux/arm64", "linux/arm/v7", "linux/mips64le", "linux/ppc64le", "linux/s390x"]
-        debian13 = ["linux/386", "linux/amd64", "linux/arm64", "linux/arm/v7", "linux/mips64le", "linux/ppc64le", "linux/riscv64", "linux/s390x"]
-        ubuntu2204 = ["linux/amd64", "linux/arm64", "linux/arm/v7", "linux/ppc64le", "linux/s390x"]
-        ubuntu2404 = ["linux/amd64", "linux/arm64", "linux/arm/v7", "linux/ppc64le", "linux/riscv64", "linux/s390x"]
-        ubuntu2510 = ["linux/amd64", "linux/arm64", "linux/arm/v7", "linux/ppc64le", "linux/riscv64", "linux/s390x"]
-        ubuntu2604 = ["linux/amd64", "linux/arm64", "linux/arm/v7", "linux/ppc64le", "linux/riscv64", "linux/s390x"]
+        debian13 = ["linux/loong64"]
+        debian14 = ["linux/loong64"]
 
-        almalinux8 = ["linux/amd64", "linux/arm64", "linux/ppc64le", "linux/s390x"]
-        almalinux9 = ["linux/amd64", "linux/arm64", "linux/ppc64le", "linux/s390x"]
-        almalinux10 = ["linux/amd64", "linux/arm64", "linux/ppc64le", "linux/s390x"]
-        centos9 = ["linux/amd64", "linux/arm64", "linux/ppc64le"]
-        centos10 = ["linux/amd64", "linux/arm64", "linux/ppc64le"]
-        fedora42 = ["linux/amd64", "linux/arm64", "linux/ppc64le", "linux/s390x"]
-        fedora43 = ["linux/amd64", "linux/arm64", "linux/ppc64le", "linux/s390x"]
-        fedora44 = ["linux/amd64", "linux/arm64", "linux/ppc64le", "linux/s390x"]
-        oraclelinux8 = ["linux/amd64", "linux/arm64"]
-        oraclelinux9 = ["linux/amd64", "linux/arm64"]
-        oraclelinux10 = ["linux/amd64", "linux/arm64"]
-        rhel8 = ["linux/amd64", "linux/arm64", "linux/ppc64le", "linux/s390x"]
-        rhel9 = ["linux/amd64", "linux/arm64", "linux/ppc64le", "linux/s390x"]
-        rhel10 = ["linux/amd64", "linux/arm64", "linux/ppc64le", "linux/s390x"]
-        rockylinux8 = ["linux/amd64", "linux/arm64"]
-        rockylinux9 = ["linux/amd64", "linux/arm64"]
-        rockylinux10 = ["linux/amd64", "linux/arm64"]
+        anolis23 = ["linux/amd64", "linux/arm64", "linux/loong64"]
+        loongnix23 = ["linux/loong64"]
+        kylin11 = ["linux/amd64", "linux/arm64", "linux/loong64"]
+        opencloudos9 = ["linux/amd64", "linux/arm64", "linux/loong64"]
+        opencloudos23 = ["linux/amd64", "linux/arm64", "linux/loong64"]
+        openeuler24 = ["linux/amd64", "linux/arm64", "linux/loong64"]
       }, distro, []),
       pkgPlatforms(pkg)
     ),
     # FIXME: add linux/ppc64le when a remote PowerPC instance is available (too slow with QEMU)
     # FIXME: add linux/riscv64 when a remote RISC-V instance is available (too slow with QEMU)
     # FIXME: add linux/s390x when a remote LinuxONE instance is reachable again (too slow with QEMU)
-    ["linux/ppc64le", "linux/riscv64", "linux/s390x"]
+    # ["linux/loong64", "linux/ppc64le", "linux/riscv64", "linux/s390x"]
+    []
   )
 }
 
@@ -633,22 +410,22 @@ function "pkgPlatforms" {
   params = [pkg]
   result = lookup({
     # https://github.com/docker/buildx/blob/0c747263ef1426f5fa217fcdb616eddf33da6c2d/docker-bake.hcl#L156-L174
-    buildx = ["darwin/amd64", "darwin/arm64", "linux/amd64", "linux/arm/v6", "linux/arm/v7", "linux/arm64", "linux/ppc64le", "linux/riscv64", "linux/s390x", "windows/amd64", "windows/arm64"]
+    buildx = ["linux/amd64", "linux/arm64", "linux/loong64", "linux/ppc64le", "linux/s390x"]
     # https://github.com/docker/compose/blob/c626befee1596abcc74578cb10dd96ae1667f76f/docker-bake.hcl#L112-L124
-    compose = ["darwin/amd64", "darwin/arm64", "linux/amd64", "linux/arm/v6", "linux/arm/v7", "linux/arm64", "linux/ppc64le", "linux/riscv64", "linux/s390x", "windows/amd64", "windows/arm64"]
+    compose = ["linux/amd64", "linux/arm64", "linux/loong64", "linux/ppc64le", "linux/s390x"]
     # https://github.com/containerd/containerd/blob/e373060a953aeaa35554e2f667043fed73ff6248/.github/workflows/ci.yml#L142-L162
     # https://github.com/containerd/containerd/blob/e373060a953aeaa35554e2f667043fed73ff6248/.github/workflows/ci.yml#L133-L134
-    containerd = ["linux/amd64", "linux/arm/v6", "linux/arm/v7", "linux/arm64", "linux/ppc64le", "linux/s390x", "windows/amd64", "windows/arm64"]
+    containerd = ["linux/amd64", "linux/arm64", "linux/loong64", "linux/ppc64le", "linux/s390x"]
     # https://github.com/docker/docker-credential-helpers/blob/f9d3010165b642df37215b1be945552f2c6f0e3b/docker-bake.hcl#L56-L66
-    credential-helpers = ["darwin/amd64", "darwin/arm64", "linux/amd64", "linux/arm/v6", "linux/arm/v7", "linux/arm64", "linux/ppc64le", "linux/s390x", "windows/amd64"]
+    credential-helpers = []
     # https://github.com/docker/cli/blob/84038691220e7ba3329a177e4e3357b4ee0e3a52/docker-bake.hcl#L30-L42
-    docker-cli = ["darwin/amd64", "darwin/arm64", "linux/386", "linux/amd64", "linux/arm/v6", "linux/arm/v7", "linux/arm64", "linux/ppc64le", "linux/riscv64", "linux/s390x", "windows/amd64", "windows/arm64"]
+    docker-cli = ["linux/amd64", "linux/arm64", "linux/loong64", "linux/ppc64le", "linux/s390x"]
     # https://github.com/moby/moby/blob/83264918d3e1c61341511e360a7277150b914b3f/docker-bake.hcl#L82-L91
-    docker-engine = ["linux/amd64", "linux/arm/v6", "linux/arm/v7", "linux/arm64", "linux/ppc64le", "linux/s390x", "windows/amd64", "windows/arm64"]
+    docker-engine = ["linux/amd64", "linux/arm64", "linux/loong64", "linux/ppc64le", "linux/s390x"]
     # https://github.com/docker/model-runner/blob/039f7a31c0365f9161c9b9b6bb3888161d16e388/cmd/cli/Makefile#L39-L43
-    model = ["darwin/amd64", "darwin/arm64", "linux/amd64", "linux/arm64", "linux/arm/v7", "windows/amd64", "windows/arm64"]
+    model = []
     # https://github.com/docker/docker-agent/blob/5b9feaabe743a5ad577f2247ed55d5dcb2678e8b/Taskfile.yml#L79
-    agent = ["darwin/amd64", "darwin/arm64", "linux/amd64", "linux/arm64", "windows/amd64", "windows/arm64"]
+    agent = []
   }, pkg, [])
 }
 
