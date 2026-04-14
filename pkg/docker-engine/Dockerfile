@@ -34,6 +34,8 @@ ARG GO_IMAGE="golang"
 ARG GO_VERSION="1.26.2"
 ARG GO_IMAGE_VARIANT="bookworm"
 
+ARG TAGPREFIX="docker-"
+
 # stage used as named context that mounts hack/scripts
 # see pkg target in docker-bake.hcl
 FROM scratch AS scripts
@@ -65,6 +67,7 @@ FROM src-base AS metadata-builder
 ARG PKG_REPO
 ARG PKG_REF
 ARG NIGHTLY_BUILD
+ARG TAGPREFIX
 RUN --mount=type=bind,from=scripts,source=gen-ver.sh,target=/usr/local/bin/gen-ver \
     --mount=type=bind,from=src,source=/src,target=/src <<EOT
   set -e
@@ -120,6 +123,7 @@ ARG PKG_DEB_BUILDFLAGS
 ARG PKG_DEB_REVISION
 ARG PKG_DEB_EPOCH
 ARG SOURCE_DATE_EPOCH
+ARG TAGPREFIX
 RUN --mount=type=bind,source=scripts/pkg-deb-build.sh,target=/usr/local/bin/pkg-deb-build \
     --mount=type=bind,source=scripts/check-gomod.sh,target=/usr/local/bin/check-gomod \
     --mount=type=bind,from=scripts,source=gen-ver.sh,target=/usr/local/bin/gen-ver \
@@ -166,6 +170,7 @@ ARG PKG_PACKAGER
 ARG PKG_RPM_BUILDFLAGS
 ARG PKG_RPM_RELEASE
 ARG SOURCE_DATE_EPOCH
+ARG TAGPREFIX
 RUN --mount=type=bind,source=scripts/pkg-rpm-build.sh,target=/usr/local/bin/pkg-rpm-build \
     --mount=type=bind,source=scripts/check-gomod.sh,target=/usr/local/bin/check-gomod \
     --mount=type=bind,from=scripts,source=gen-ver.sh,target=/usr/local/bin/gen-ver \
@@ -195,6 +200,7 @@ RUN apt-get install -y --no-install-recommends clang cmake gcc libc6-dev lld llv
 ARG PKG_NAME
 ARG PKG_REF
 ARG NIGHTLY_BUILD
+ARG TAGPREFIX
 WORKDIR /build
 ARG TARGETPLATFORM
 RUN xx-apt-get install -y gcc libc6-dev libapparmor-dev libnftables-dev libsecret-1-dev libsystemd-dev libudev-dev pkg-config
