@@ -63,8 +63,9 @@ case "$pkgrelease" in
     dnf config-manager --enable ol9_addons ol9_codeready_builder
     ;;
   oraclelinux10)
-    dnf install -y git rpm-build rpmlint dnf-plugins-core oraclelinux-release-el10 oracle-epel-release-el10
+    dnf install -y dnf-plugins-core oraclelinux-release-el10 oracle-epel-release-el10
     dnf config-manager --enable ol10_addons ol10_codeready_builder
+    dnf install -y git rpm-build rpmlint
     ;;
   fedora*)
     dnf install -y git rpm-build rpmlint dnf-plugins-core
