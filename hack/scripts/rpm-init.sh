@@ -74,8 +74,10 @@ case "$pkgrelease" in
     dnf config-manager --set-enabled powertools
     ;;
   rockylinux*|almalinux*)
-    dnf install -y git rpm-build rpmlint dnf-plugins-core epel-release
+    dnf install -y dnf-plugins-core epel-release
     dnf config-manager --set-enabled crb
+    # crb repo is needed for rpmlint
+    dnf install -y git rpm-build rpmlint
     ;;
   rhel*)
     # skipping rpmlint as it requires dependencies not available in ubi images
