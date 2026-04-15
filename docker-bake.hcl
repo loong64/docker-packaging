@@ -35,6 +35,7 @@ variable "DISTROS" {
     "fedora44",
     "oraclelinux8",
     "oraclelinux9",
+    "oraclelinux10",
     "rhel8",
     "rhel9",
     "rhel10",
@@ -388,6 +389,18 @@ target "_distro-oraclelinux9" {
   }
 }
 
+target "_distro-oraclelinux10" {
+  args = {
+    DISTRO_NAME = "oraclelinux10"
+    DISTRO_TYPE = "rpm"
+    DISTRO_RELEASE = "oraclelinux"
+    DISTRO_ID = "10"
+    DISTRO_SUITE = "10"
+    DISTRO_IMAGE = DISTRO_IMAGE != null && DISTRO_IMAGE != "" ? DISTRO_IMAGE : "oraclelinux:10"
+    TEST_ONLY = "1"
+  }
+}
+
 target "_distro-rhel8" {
   args = {
     DISTRO_NAME = "rhel8"
@@ -478,6 +491,7 @@ function "distroPlatforms" {
         fedora44 = ["linux/amd64", "linux/arm64", "linux/ppc64le", "linux/s390x"]
         oraclelinux8 = ["linux/amd64", "linux/arm64"]
         oraclelinux9 = ["linux/amd64", "linux/arm64"]
+        oraclelinux10 = ["linux/amd64", "linux/arm64"]
         rhel8 = ["linux/amd64", "linux/arm64", "linux/ppc64le", "linux/s390x"]
         rhel9 = ["linux/amd64", "linux/arm64", "linux/ppc64le", "linux/s390x"]
         rhel10 = ["linux/amd64", "linux/arm64", "linux/ppc64le", "linux/s390x"]
