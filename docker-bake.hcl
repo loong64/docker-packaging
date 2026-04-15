@@ -40,7 +40,8 @@ variable "DISTROS" {
     "rhel9",
     "rhel10",
     "rockylinux8",
-    "rockylinux9"
+    "rockylinux9",
+    "rockylinux10"
   ]
 }
 
@@ -461,6 +462,18 @@ target "_distro-rockylinux9" {
   }
 }
 
+target "_distro-rockylinux10" {
+  args = {
+    DISTRO_NAME = "rockylinux10"
+    DISTRO_TYPE = "rpm"
+    DISTRO_RELEASE = "rockylinux"
+    DISTRO_ID = "10"
+    DISTRO_SUITE = "10"
+    DISTRO_IMAGE = DISTRO_IMAGE != null && DISTRO_IMAGE != "" ? DISTRO_IMAGE : "rockylinux/rockylinux:10"
+    TEST_ONLY = "1"
+  }
+}
+
 # Returns the list of supported platforms for a given distro and package.
 # The result is the intersection of the platforms supported by the distro
 # and the platforms supported by the package. Except for static distro,
@@ -497,6 +510,7 @@ function "distroPlatforms" {
         rhel10 = ["linux/amd64", "linux/arm64", "linux/ppc64le", "linux/s390x"]
         rockylinux8 = ["linux/amd64", "linux/arm64"]
         rockylinux9 = ["linux/amd64", "linux/arm64"]
+        rockylinux10 = ["linux/amd64", "linux/arm64"]
       }, distro, []),
       pkgPlatforms(pkg)
     ),
