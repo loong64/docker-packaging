@@ -27,6 +27,7 @@ variable "DISTROS" {
 
     "almalinux8",
     "almalinux9",
+    "almalinux10",
     "centos9",
     "centos10",
     "fedora42",
@@ -291,6 +292,18 @@ target "_distro-almalinux9" {
   }
 }
 
+target "_distro-almalinux10" {
+  args = {
+    DISTRO_NAME = "almalinux10"
+    DISTRO_TYPE = "rpm"
+    DISTRO_RELEASE = "almalinux"
+    DISTRO_ID = "10"
+    DISTRO_SUITE = "10"
+    DISTRO_IMAGE = DISTRO_IMAGE != null && DISTRO_IMAGE != "" ? DISTRO_IMAGE : "almalinux:10"
+    TEST_ONLY = "1"
+  }
+}
+
 target "_distro-centos9" {
   args = {
     DISTRO_NAME = "centos9"
@@ -457,6 +470,7 @@ function "distroPlatforms" {
 
         almalinux8 = ["linux/amd64", "linux/arm64", "linux/ppc64le", "linux/s390x"]
         almalinux9 = ["linux/amd64", "linux/arm64", "linux/ppc64le", "linux/s390x"]
+        almalinux10 = ["linux/amd64", "linux/arm64", "linux/ppc64le", "linux/s390x"]
         centos9 = ["linux/amd64", "linux/arm64", "linux/ppc64le"]
         centos10 = ["linux/amd64", "linux/arm64", "linux/ppc64le"]
         fedora42 = ["linux/amd64", "linux/arm64", "linux/ppc64le", "linux/s390x"]
