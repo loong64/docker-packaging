@@ -27,6 +27,7 @@ variable "DISTROS" {
 
     "almalinux8",
     "almalinux9",
+    "almalinux10",
     "centos9",
     "centos10",
     "fedora42",
@@ -34,11 +35,13 @@ variable "DISTROS" {
     "fedora44",
     "oraclelinux8",
     "oraclelinux9",
+    "oraclelinux10",
     "rhel8",
     "rhel9",
     "rhel10",
     "rockylinux8",
-    "rockylinux9"
+    "rockylinux9",
+    "rockylinux10"
   ]
 }
 
@@ -291,6 +294,18 @@ target "_distro-almalinux9" {
   }
 }
 
+target "_distro-almalinux10" {
+  args = {
+    DISTRO_NAME = "almalinux10"
+    DISTRO_TYPE = "rpm"
+    DISTRO_RELEASE = "almalinux"
+    DISTRO_ID = "10"
+    DISTRO_SUITE = "10"
+    DISTRO_IMAGE = DISTRO_IMAGE != null && DISTRO_IMAGE != "" ? DISTRO_IMAGE : "almalinux:10"
+    TEST_ONLY = "1"
+  }
+}
+
 target "_distro-centos9" {
   args = {
     DISTRO_NAME = "centos9"
@@ -375,6 +390,18 @@ target "_distro-oraclelinux9" {
   }
 }
 
+target "_distro-oraclelinux10" {
+  args = {
+    DISTRO_NAME = "oraclelinux10"
+    DISTRO_TYPE = "rpm"
+    DISTRO_RELEASE = "oraclelinux"
+    DISTRO_ID = "10"
+    DISTRO_SUITE = "10"
+    DISTRO_IMAGE = DISTRO_IMAGE != null && DISTRO_IMAGE != "" ? DISTRO_IMAGE : "oraclelinux:10"
+    TEST_ONLY = "1"
+  }
+}
+
 target "_distro-rhel8" {
   args = {
     DISTRO_NAME = "rhel8"
@@ -435,6 +462,18 @@ target "_distro-rockylinux9" {
   }
 }
 
+target "_distro-rockylinux10" {
+  args = {
+    DISTRO_NAME = "rockylinux10"
+    DISTRO_TYPE = "rpm"
+    DISTRO_RELEASE = "rockylinux"
+    DISTRO_ID = "10"
+    DISTRO_SUITE = "10"
+    DISTRO_IMAGE = DISTRO_IMAGE != null && DISTRO_IMAGE != "" ? DISTRO_IMAGE : "rockylinux/rockylinux:10"
+    TEST_ONLY = "1"
+  }
+}
+
 # Returns the list of supported platforms for a given distro and package.
 # The result is the intersection of the platforms supported by the distro
 # and the platforms supported by the package. Except for static distro,
@@ -457,6 +496,7 @@ function "distroPlatforms" {
 
         almalinux8 = ["linux/amd64", "linux/arm64", "linux/ppc64le", "linux/s390x"]
         almalinux9 = ["linux/amd64", "linux/arm64", "linux/ppc64le", "linux/s390x"]
+        almalinux10 = ["linux/amd64", "linux/arm64", "linux/ppc64le", "linux/s390x"]
         centos9 = ["linux/amd64", "linux/arm64", "linux/ppc64le"]
         centos10 = ["linux/amd64", "linux/arm64", "linux/ppc64le"]
         fedora42 = ["linux/amd64", "linux/arm64", "linux/ppc64le", "linux/s390x"]
@@ -464,11 +504,13 @@ function "distroPlatforms" {
         fedora44 = ["linux/amd64", "linux/arm64", "linux/ppc64le", "linux/s390x"]
         oraclelinux8 = ["linux/amd64", "linux/arm64"]
         oraclelinux9 = ["linux/amd64", "linux/arm64"]
+        oraclelinux10 = ["linux/amd64", "linux/arm64"]
         rhel8 = ["linux/amd64", "linux/arm64", "linux/ppc64le", "linux/s390x"]
         rhel9 = ["linux/amd64", "linux/arm64", "linux/ppc64le", "linux/s390x"]
         rhel10 = ["linux/amd64", "linux/arm64", "linux/ppc64le", "linux/s390x"]
         rockylinux8 = ["linux/amd64", "linux/arm64"]
         rockylinux9 = ["linux/amd64", "linux/arm64"]
+        rockylinux10 = ["linux/amd64", "linux/arm64"]
       }, distro, []),
       pkgPlatforms(pkg)
     ),

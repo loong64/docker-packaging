@@ -62,6 +62,11 @@ case "$pkgrelease" in
     dnf install -y git rpm-build rpmlint dnf-plugins-core oraclelinux-release-el9 oracle-epel-release-el9
     dnf config-manager --enable ol9_addons ol9_codeready_builder
     ;;
+  oraclelinux10)
+    dnf install -y dnf-plugins-core oraclelinux-release-el10 oracle-epel-release-el10
+    dnf config-manager --enable ol10_addons ol10_codeready_builder
+    dnf install -y git rpm-build rpmlint
+    ;;
   fedora*)
     dnf install -y git rpm-build rpmlint dnf-plugins-core
     ;;
@@ -70,8 +75,10 @@ case "$pkgrelease" in
     dnf config-manager --set-enabled powertools
     ;;
   rockylinux*|almalinux*)
-    dnf install -y git rpm-build rpmlint dnf-plugins-core epel-release
+    dnf install -y dnf-plugins-core epel-release
     dnf config-manager --set-enabled crb
+    # crb repo is needed for rpmlint
+    dnf install -y git rpm-build rpmlint
     ;;
   rhel*)
     # skipping rpmlint as it requires dependencies not available in ubi images

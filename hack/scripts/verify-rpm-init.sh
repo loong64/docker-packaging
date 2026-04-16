@@ -47,6 +47,11 @@ case "$pkgrelease" in
     dnf install -y findutils dnf-plugins-core oraclelinux-release-el9 oracle-epel-release-el9
     dnf config-manager --enable ol9_addons ol9_codeready_builder
     ;;
+  oraclelinux10)
+    dnf install -y dnf-plugins-core oraclelinux-release-el10 oracle-epel-release-el10
+    dnf config-manager --enable ol10_addons ol10_codeready_builder
+    dnf install -y findutils
+    ;;
   fedora*|rhel*)
     dnf install -y findutils dnf-plugins-core
     ;;
