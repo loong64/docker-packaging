@@ -45,8 +45,8 @@ variable "DISTROS" {
   ]
 }
 
-variable "PKGS" {
-  description = "List of packages to build from ./pkg directory. Don't forget to update _pkg-* target if you add/remove a package."
+variable "PKGS_BASE" {
+  description = "Base list of packages built from this repo. Use PKGS_EXTRA in an override file to add downstream packages."
   default = [
     "buildx",
     "compose",
@@ -57,6 +57,49 @@ variable "PKGS" {
     "model",
     "agent"
   ]
+}
+
+variable "PKGS_EXTRA" {
+  description = "Additional packages to append from an override bake definition."
+  default = []
+}
+
+variable "PKGS" {
+  description = "Full list of packages to build from ./pkg directory or an override-provided package context."
+  default = concat(PKGS_BASE, PKGS_EXTRA)
+}
+
+variable "PKG_PLATFORMS_BASE" {
+  description = "Base package platform mapping. Use PKG_PLATFORMS_EXTRA in an override bake definition to add downstream packages."
+  default = {
+    # https://github.com/docker/buildx/blob/0c747263ef1426f5fa217fcdb616eddf33da6c2d/docker-bake.hcl#L156-L174
+    buildx = ["darwin/amd64", "darwin/arm64", "linux/amd64", "linux/arm/v6", "linux/arm/v7", "linux/arm64", "linux/ppc64le", "linux/riscv64", "linux/s390x", "windows/amd64", "windows/arm64"]
+    # https://github.com/docker/compose/blob/c626befee1596abcc74578cb10dd96ae1667f76f/docker-bake.hcl#L112-L124
+    compose = ["darwin/amd64", "darwin/arm64", "linux/amd64", "linux/arm/v6", "linux/arm/v7", "linux/arm64", "linux/ppc64le", "linux/riscv64", "linux/s390x", "windows/amd64", "windows/arm64"]
+    # https://github.com/containerd/containerd/blob/e373060a953aeaa35554e2f667043fed73ff6248/.github/workflows/ci.yml#L142-L162
+    # https://github.com/containerd/containerd/blob/e373060a953aeaa35554e2f667043fed73ff6248/.github/workflows/ci.yml#L133-L134
+    containerd = ["linux/amd64", "linux/arm/v6", "linux/arm/v7", "linux/arm64", "linux/ppc64le", "linux/s390x", "windows/amd64", "windows/arm64"]
+    # https://github.com/docker/docker-credential-helpers/blob/f9d3010165b642df37215b1be945552f2c6f0e3b/docker-bake.hcl#L56-L66
+    credential-helpers = ["darwin/amd64", "darwin/arm64", "linux/amd64", "linux/arm/v6", "linux/arm/v7", "linux/arm64", "linux/ppc64le", "linux/s390x", "windows/amd64"]
+    # https://github.com/docker/cli/blob/84038691220e7ba3329a177e4e3357b4ee0e3a52/docker-bake.hcl#L30-L42
+    docker-cli = ["darwin/amd64", "darwin/arm64", "linux/386", "linux/amd64", "linux/arm/v6", "linux/arm/v7", "linux/arm64", "linux/ppc64le", "linux/riscv64", "linux/s390x", "windows/amd64", "windows/arm64"]
+    # https://github.com/moby/moby/blob/83264918d3e1c61341511e360a7277150b914b3f/docker-bake.hcl#L82-L91
+    docker-engine = ["linux/amd64", "linux/arm/v6", "linux/arm/v7", "linux/arm64", "linux/ppc64le", "linux/s390x", "windows/amd64", "windows/arm64"]
+    # https://github.com/docker/model-runner/blob/039f7a31c0365f9161c9b9b6bb3888161d16e388/cmd/cli/Makefile#L39-L43
+    model = ["darwin/amd64", "darwin/arm64", "linux/amd64", "linux/arm64", "linux/arm/v7", "windows/amd64", "windows/arm64"]
+    # https://github.com/docker/docker-agent/blob/5b9feaabe743a5ad577f2247ed55d5dcb2678e8b/Taskfile.yml#L79
+    agent = ["darwin/amd64", "darwin/arm64", "linux/amd64", "linux/arm64", "windows/amd64", "windows/arm64"]
+  }
+}
+
+variable "PKG_PLATFORMS_EXTRA" {
+  description = "Additional package platform mapping to merge from an override bake definition."
+  default = {}
+}
+
+variable "PKG_CONTEXTS_EXTRA" {
+  description = "Additional package context mapping to merge from an override bake definition."
+  default = {}
 }
 
 variable "DISTRO_NAME" {
@@ -631,25 +674,12 @@ target "_pkg-agent" {
 # Returns the list of supported platforms for a given package.
 function "pkgPlatforms" {
   params = [pkg]
-  result = lookup({
-    # https://github.com/docker/buildx/blob/0c747263ef1426f5fa217fcdb616eddf33da6c2d/docker-bake.hcl#L156-L174
-    buildx = ["darwin/amd64", "darwin/arm64", "linux/amd64", "linux/arm/v6", "linux/arm/v7", "linux/arm64", "linux/ppc64le", "linux/riscv64", "linux/s390x", "windows/amd64", "windows/arm64"]
-    # https://github.com/docker/compose/blob/c626befee1596abcc74578cb10dd96ae1667f76f/docker-bake.hcl#L112-L124
-    compose = ["darwin/amd64", "darwin/arm64", "linux/amd64", "linux/arm/v6", "linux/arm/v7", "linux/arm64", "linux/ppc64le", "linux/riscv64", "linux/s390x", "windows/amd64", "windows/arm64"]
-    # https://github.com/containerd/containerd/blob/e373060a953aeaa35554e2f667043fed73ff6248/.github/workflows/ci.yml#L142-L162
-    # https://github.com/containerd/containerd/blob/e373060a953aeaa35554e2f667043fed73ff6248/.github/workflows/ci.yml#L133-L134
-    containerd = ["linux/amd64", "linux/arm/v6", "linux/arm/v7", "linux/arm64", "linux/ppc64le", "linux/s390x", "windows/amd64", "windows/arm64"]
-    # https://github.com/docker/docker-credential-helpers/blob/f9d3010165b642df37215b1be945552f2c6f0e3b/docker-bake.hcl#L56-L66
-    credential-helpers = ["darwin/amd64", "darwin/arm64", "linux/amd64", "linux/arm/v6", "linux/arm/v7", "linux/arm64", "linux/ppc64le", "linux/s390x", "windows/amd64"]
-    # https://github.com/docker/cli/blob/84038691220e7ba3329a177e4e3357b4ee0e3a52/docker-bake.hcl#L30-L42
-    docker-cli = ["darwin/amd64", "darwin/arm64", "linux/386", "linux/amd64", "linux/arm/v6", "linux/arm/v7", "linux/arm64", "linux/ppc64le", "linux/riscv64", "linux/s390x", "windows/amd64", "windows/arm64"]
-    # https://github.com/moby/moby/blob/83264918d3e1c61341511e360a7277150b914b3f/docker-bake.hcl#L82-L91
-    docker-engine = ["linux/amd64", "linux/arm/v6", "linux/arm/v7", "linux/arm64", "linux/ppc64le", "linux/s390x", "windows/amd64", "windows/arm64"]
-    # https://github.com/docker/model-runner/blob/039f7a31c0365f9161c9b9b6bb3888161d16e388/cmd/cli/Makefile#L39-L43
-    model = ["darwin/amd64", "darwin/arm64", "linux/amd64", "linux/arm64", "linux/arm/v7", "windows/amd64", "windows/arm64"]
-    # https://github.com/docker/docker-agent/blob/5b9feaabe743a5ad577f2247ed55d5dcb2678e8b/Taskfile.yml#L79
-    agent = ["darwin/amd64", "darwin/arm64", "linux/amd64", "linux/arm64", "windows/amd64", "windows/arm64"]
-  }, pkg, [])
+  result = lookup(merge(PKG_PLATFORMS_BASE, PKG_PLATFORMS_EXTRA), pkg, [])
+}
+
+function "pkgContext" {
+  params = [pkg]
+  result = lookup(PKG_CONTEXTS_EXTRA, pkg, "./pkg/${pkg}")
 }
 
 #
@@ -694,7 +724,7 @@ target "pkg" {
     pkg = PKGS
     distro = DISTROS
   }
-  context = "./pkg/${pkg}"
+  context = pkgContext(pkg)
   contexts = {
     scripts = "./hack/scripts"
   }
@@ -717,7 +747,7 @@ target "verify" {
     pkg = PKGS
     distro = DISTROS
   }
-  context = "./pkg/${pkg}"
+  context = pkgContext(pkg)
   dockerfile = "verify.Dockerfile"
   contexts = {
     scripts = "./hack/scripts"
@@ -750,7 +780,7 @@ target "metadata" {
   matrix = {
     pkg = PKGS
   }
-  context = "./pkg/${pkg}"
+  context = pkgContext(pkg)
   contexts = {
     scripts = "./hack/scripts"
   }
