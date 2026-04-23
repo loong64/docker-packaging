@@ -1,4 +1,4 @@
-name: release-docker-engine
+name: release-docker
 
 permissions:
   contents: read
@@ -10,8 +10,16 @@ concurrency:
 on:
   workflow_dispatch:
     inputs:
-      ref:
-        description: 'Tag/ref to build (e.g. v23.0.0)'
+      engine-ref:
+        description: 'Git ref for docker-engine (e.g. v28.1.0, master, a commit SHA)'
+        required: true
+        type: string
+      cli-ref:
+        description: 'Git ref for docker-cli (e.g. v28.1.0, master, a commit SHA)'
+        required: true
+        type: string
+      version:
+        description: 'Docker version (used for both engine and cli, e.g. 28.1.0)'
         required: true
         type: string
       release:
@@ -36,13 +44,17 @@ on:
         required: false
         type: string
         default: ''
-      repo:
-        description: '(optional) Override default repo (if want to build from a different Github repo/fork)'
+      engine-repo:
+        description: '(optional) Override default engine repo (if want to build from a different Github repo/fork)'
+        required: false
+        type: string
+      cli-repo:
+        description: '(optional) Override default cli repo (if want to build from a different Github repo/fork)'
         required: false
         type: string
 
 jobs:
-  release:
+  engine:
     uses: ./.github/workflows/.build.yml
     permissions:
       contents: write # needed to create release and upload artifacts
@@ -51,8 +63,27 @@ jobs:
       release: ${{ inputs.release }}
       distros: ${{ inputs.distros }}
       envs: |
-        PKG_REPO=${{ inputs.repo }}
-        PKG_REF=${{ inputs.ref }}
+        PKG_REPO=${{ inputs.engine-repo }}
+        PKG_REF=${{ inputs.engine-ref }}
+        PKG_DEB_REVISION=${{ inputs.revision }}
+        PKG_RPM_RELEASE=${{ inputs.revision }}
+    secrets:
+      rh_user: ${{ secrets.RH_USER }}
+      rh_pass: ${{ secrets.RH_PASS }}
+      dockerpublicbot_username: ${{ secrets.DOCKERPUBLICBOT_USERNAME }}
+      dockerpublicbot_write_pat: ${{ secrets.DOCKERPUBLICBOT_WRITE_PAT }}
+
+  cli:
+    uses: ./.github/workflows/.build.yml
+    permissions:
+      contents: write # needed to create release and upload artifacts
+    with:
+      name: docker-cli
+      release: ${{ inputs.release }}
+      distros: ${{ inputs.distros }}
+      envs: |
+        PKG_REPO=${{ inputs.cli-repo }}
+        PKG_REF=${{ inputs.cli-ref }}
         PKG_DEB_REVISION=${{ inputs.revision }}
         PKG_RPM_RELEASE=${{ inputs.revision }}
     secrets:
