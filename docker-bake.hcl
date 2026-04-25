@@ -22,6 +22,7 @@ variable "DISTROS" {
 
     "anolis23",
     "loongnix23",
+    "loongnix25",
     "kylin11",
     "opencloudos9",
     "opencloudos23",
@@ -194,7 +195,7 @@ variable "BUILD_CACHE_REGISTRY_SLUG" {
 }
 variable "BUILD_CACHE_REGISTRY_PUSH" {
   description = "Set to 1 to enable pushing to the registry cache exporter."
-  default = "1"
+  default = ""
 }
 
 #
@@ -257,6 +258,18 @@ target "_distro-loongnix23" {
     DISTRO_ID = "23"
     DISTRO_SUITE = "23"
     DISTRO_IMAGE = DISTRO_IMAGE != null && DISTRO_IMAGE != "" ? DISTRO_IMAGE : "ghcr.io/loong64/loongnix:23"
+    TEST_ONLY = "0"
+  }
+}
+
+target "_distro-loongnix25" {
+  args = {
+    DISTRO_NAME = "loongnix25"
+    DISTRO_TYPE = "deb"
+    DISTRO_RELEASE = "loongnix"
+    DISTRO_ID = "25"
+    DISTRO_SUITE = "lnd.1"
+    DISTRO_IMAGE = DISTRO_IMAGE != null && DISTRO_IMAGE != "" ? DISTRO_IMAGE : "ghcr.io/loong64/loongnix:25"
     TEST_ONLY = "0"
   }
 }
@@ -326,6 +339,7 @@ function "distroPlatforms" {
 
         anolis23 = ["linux/amd64", "linux/arm64", "linux/loong64"]
         loongnix23 = ["linux/loong64"]
+        loongnix25 = ["linux/loong64"]
         kylin11 = ["linux/amd64", "linux/arm64", "linux/loong64"]
         opencloudos9 = ["linux/amd64", "linux/arm64", "linux/loong64"]
         opencloudos23 = ["linux/amd64", "linux/arm64", "linux/loong64"]
