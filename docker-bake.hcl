@@ -25,7 +25,6 @@ variable "DISTROS" {
     "loongnix25",
     "kylin11",
     "opencloudos9",
-    "opencloudos23",
     "openeuler24"
   ]
 }
@@ -342,7 +341,6 @@ function "distroPlatforms" {
         loongnix25 = ["linux/loong64"]
         kylin11 = ["linux/amd64", "linux/arm64", "linux/loong64"]
         opencloudos9 = ["linux/amd64", "linux/arm64", "linux/loong64"]
-        opencloudos23 = ["linux/amd64", "linux/arm64", "linux/loong64"]
         openeuler24 = ["linux/amd64", "linux/arm64", "linux/loong64"]
       }, distro, []),
       pkgPlatforms(pkg)
