@@ -22,7 +22,6 @@ variable "DISTROS" {
 
     "anolis23",
     "loongnix23",
-    "loongnix25",
     "kylin11",
     "opencloudos9",
     "openeuler24"
@@ -261,18 +260,6 @@ target "_distro-loongnix23" {
   }
 }
 
-target "_distro-loongnix25" {
-  args = {
-    DISTRO_NAME = "loongnix25"
-    DISTRO_TYPE = "deb"
-    DISTRO_RELEASE = "loongnix"
-    DISTRO_ID = "25"
-    DISTRO_SUITE = "lnd.1"
-    DISTRO_IMAGE = DISTRO_IMAGE != null && DISTRO_IMAGE != "" ? DISTRO_IMAGE : "ghcr.io/loong64/loongnix:25"
-    TEST_ONLY = "0"
-  }
-}
-
 target "_distro-kylin11" {
   args = {
     DISTRO_NAME = "kylin11"
@@ -337,7 +324,6 @@ function "distroPlatforms" {
 
         anolis23 = ["linux/amd64", "linux/arm64", "linux/loong64"]
         loongnix23 = ["linux/loong64"]
-        loongnix25 = ["linux/loong64"]
         kylin11 = ["linux/amd64", "linux/arm64", "linux/loong64"]
         opencloudos9 = ["linux/amd64", "linux/arm64", "linux/loong64"]
         openeuler24 = ["linux/amd64", "linux/arm64", "linux/loong64"]
